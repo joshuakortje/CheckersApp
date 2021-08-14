@@ -26,6 +26,9 @@ enum Color
  * 
  * Switch to checkers,      12/16/20
  * Added getDisplayText
+ * 
+ * Removed getDisplayText,   8/14/21
+ * put in Board class
  */
 public class Square {
     
@@ -57,7 +60,8 @@ public class Square {
     /**
      * Constructor for the square class.
      * 
-     * @param acNewResident the piece on the square
+     * @param abOccupied true if the square has a piece on it
+     * @param aePieceColor the piece on the square (null if empty)
      * @param aeSquareColor the color of the square
      * @param anRow the row of the square
      * @param anCol the column of the square
@@ -78,8 +82,17 @@ public class Square {
      */
     public void setPiece(Color aeNewPieceColor)
     {
-        mbHasPiece = true;
         mePieceColor = aeNewPieceColor;
+        
+        // Determine if we just put a piece here or removed one
+        if(mePieceColor == null)
+        {
+            mbHasPiece = false;
+        }
+        else
+        {
+            mbHasPiece = true;
+        }
     }
     
     /**
@@ -130,26 +143,5 @@ public class Square {
    public int getCol()
    {
        return mnCol;
-   }
-   
-   public String getDisplayText()
-   {
-       String text = "";
-       if(!mbHasPiece)
-       {
-           text = "";
-       }
-       else
-       {
-           if(mePieceColor == Color.eeWHITE)
-           {
-               text = "W";
-           }
-           else
-           {
-               text = "B";
-           }
-       }
-       return text;
    }
 }

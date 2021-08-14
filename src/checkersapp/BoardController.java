@@ -10,10 +10,12 @@
  * 
  * Switch to checkers,      12/16/20
  * Added button detection
+ * 
+ * Condensed Button handlers,  8/14/21
+ * Moved display function to this class
  */
 package checkersapp;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,23 +25,44 @@ import java.awt.event.ActionListener;
  */
 public class BoardController extends javax.swing.JFrame {
     
-    //a handler for the board class that does all of the implementation of the game
+    /**
+     * Handler for the board class that does all of the implementation of the game
+     */
     Board mcBoard;
     
-    //a flag to indicate if a square has already been selected
+    /**
+     * A flag to indicate if a square has already been selected
+     */
     boolean mbIsSelected;
-    //the row and column of the selected square
+    
+    /**
+     * The row of the selected square
+     */
     int mnRowSel;
+    
+    /**
+     * The column of the selected square
+     */
     int mnColSel;
     
+    /**
+     * An array of buttons that handle events from the user
+     */
     private javax.swing.JButton[][] maacSquares;
 
     /**
-     * Creates new form BoardController
+     * Creates new BoardController
+     * 
+     * @param acNewBoard the Board for the game
      */
     public BoardController(Board acNewBoard) {
+        // Initialize the GUI components
         initComponents();
+        
+        // Assign the board to a handle
         mcBoard = acNewBoard;
+        
+        // Initialize the array of Buttons
         maacSquares = new javax.swing.JButton[8][8];
         maacSquares[0][0] = a1;
         maacSquares[0][1] = a2;
@@ -112,1173 +135,65 @@ public class BoardController extends javax.swing.JFrame {
         maacSquares[7][5] = h6;
         maacSquares[7][6] = h7;
         maacSquares[7][7] = h8;
+        
+        // Set variables that denote which square was previously selected
         mbIsSelected = false;
         mnRowSel = 0;
         mnColSel = 0;
-        mcBoard.setBoardController(this);
+        
+        // Create the Action Handlers for the squares
         createActionHandlers();
     }
     
-    public javax.swing.JButton[][] getSquareArray()
+    /**
+     * This function updates the board tile text
+     */
+    private void displayBoard()
     {
-        return maacSquares;
+        for(int lnRow = 0; lnRow < mcBoard.BOARD_WIDTH; lnRow++)
+        {
+            for(int lnCol = 0; lnCol < mcBoard.BOARD_WIDTH; lnCol++)
+            {
+                maacSquares[lnRow][lnCol].setText(mcBoard.getDisplayText(lnRow, lnCol));
+            }
+        }
     }
     
     private void createActionHandlers()
     {
-        //action listeners
-        a1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 0;
-                }
-            }
-            });
-        a2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 1;
-                }
-            }
-            });
-        a3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 2;
-                }
-            }
-            });
-        a4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 3;
-                }
-            }
-            });
-        a5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 4;
-                }
-            }
-            });
-        a6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 5;
-                }
-            }
-            });
-        a7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 6;
-                }
-            }
-            });
-        a8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 0, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 0;
-                    mnColSel = 7;
-                }
-            }
-            });
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 0;
-                }
-            }
-            });
-        b2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 1;
-                }
-            }
-            });
-        b3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 2;
-                }
-            }
-            });
-        b4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 3;
-                }
-            }
-            });
-        b5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 4;
-                }
-            }
-            });
-        b6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 5;
-                }
-            }
-            });
-        b7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 6;
-                }
-            }
-            });
-        b8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 1, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 1;
-                    mnColSel = 7;
-                }
-            }
-            });
-        c1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 0;
-                }
-            }
-            });
-        c2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 1;
-                }
-            }
-            });
-        c3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 2;
-                }
-            }
-            });
-        c4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 3;
-                }
-            }
-            });
-        c5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 4;
-                }
-            }
-            });
-        c6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 5;
-                }
-            }
-            });
-        c7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 6;
-                }
-            }
-            });
-        c8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 2, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 2;
-                    mnColSel = 7;
-                }
-            }
-            });
-        d1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 0;
-                }
-            }
-            });
-        d2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 1;
-                }
-            }
-            });
-        d3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 2;
-                }
-            }
-            });
-        d4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 3;
-                }
-            }
-            });
-        d5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 4;
-                }
-            }
-            });
-        d6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 5;
-                }
-            }
-            });
-        d7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 6;
-                }
-            }
-            });
-        d8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 3, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 3;
-                    mnColSel = 7;
-                }
-            }
-            });
-        e1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 0;
-                }
-            }
-            });
-        e2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 1;
-                }
-            }
-            });
-        e3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 2;
-                }
-            }
-            });
-        e4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 3;
-                }
-            }
-            });
-        e5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 4;
-                }
-            }
-            });
-        e6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 5;
-                }
-            }
-            });
-        e7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 6;
-                }
-            }
-            });
-        e8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 4, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 4;
-                    mnColSel = 7;
-                }
-            }
-            });
-        f1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 0;
-                }
-            }
-            });
-        f2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 1;
-                }
-            }
-            });
-        f3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 2;
-                }
-            }
-            });
-        f4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 3;
-                }
-            }
-            });
-        f5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 4;
-                }
-            }
-            });
-        f6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 5;
-                }
-            }
-            });
-        f7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 6;
-                }
-            }
-            });
-        f8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 5, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 5;
-                    mnColSel = 7;
-                }
-            }
-            });
-        g1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 0;
-                }
-            }
-            });
-        g2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 1;
-                }
-            }
-            });
-        g3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 2;
-                }
-            }
-            });
-        g4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 3;
-                }
-            }
-            });
-        g5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 4;
-                }
-            }
-            });
-        g6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 5;
-                }
-            }
-            });
-        g7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 6;
-                }
-            }
-            });
-        g8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 6, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 6;
-                    mnColSel = 7;
-                }
-            }
-            });
-        h1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 0);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 0;
-                }
-            }
-            });
-        h2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 1);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 1;
-                }
-            }
-            });
-        h3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 2);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 2;
-                }
-            }
-            });
-        h4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 3);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 3;
-                }
-            }
-            });
-        h5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 4);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 4;
-                }
-            }
-            });
-        h6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 5);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 5;
-                }
-            }
-            });
-        h7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 6);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 6;
-                }
-            }
-            });
-        h8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(mbIsSelected)
-                {
-                    // if this is the 2nd square to select try to make a move
-                    mcBoard.movePlayed(mnRowSel, mnColSel, 7, 7);
-                    mbIsSelected = false;
-                }
-                else
-                {
-                    // if this is the 1st square to select, save the location
-                    mbIsSelected = true;
-                    mnRowSel = 7;
-                    mnColSel = 7;
-                }
-            }
-            });
+        // Create the action handlers for each square
+        for(int lnRow = 0; lnRow < mcBoard.BOARD_WIDTH; lnRow++)
+        {
+            for(int lnCol = 0; lnCol < mcBoard.BOARD_WIDTH; lnCol++)
+            {
+                maacSquares[lnRow][lnCol].addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // The action command contains the location of the 
+                        // square that was selected. Parse it to get the 
+                        // row and column.
+                        String lsLocation = e.getActionCommand();
+                        int lnRowSel = Integer.parseInt(Character.toString(lsLocation.charAt(0)));
+                        int lnColSel = Integer.parseInt(Character.toString(lsLocation.charAt(1)));
+                        
+                        // See if we have already selected another square
+                        if(mbIsSelected)
+                        {
+                            // if this is the 2nd square to select try to make a move
+                            mcBoard.movePlayed(mnRowSel, mnColSel, lnRowSel, lnColSel);
+                            mbIsSelected = false;
+                        }
+                        else
+                        {
+                            // if this is the 1st square to select, save the location
+                            mbIsSelected = true;
+                            mnRowSel = lnRowSel;
+                            mnColSel = lnColSel;
+                        }
+                    }
+                    });
+            }
+        }
     }
 
     /**
@@ -1362,196 +277,196 @@ public class BoardController extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
         a1.setBackground(new java.awt.Color(153, 153, 153));
-        a1.setText("jButton1");
+        a1.setActionCommand("00");
 
         a2.setBackground(new java.awt.Color(255, 255, 255));
-        a2.setText("jButton2");
+        a2.setActionCommand("01");
 
         a3.setBackground(new java.awt.Color(153, 153, 153));
-        a3.setText("jButton3");
+        a3.setActionCommand("02");
 
         a4.setBackground(new java.awt.Color(255, 255, 255));
-        a4.setText("jButton4");
+        a4.setActionCommand("03");
 
         a5.setBackground(new java.awt.Color(153, 153, 153));
-        a5.setText("jButton5");
+        a5.setActionCommand("04");
 
         a6.setBackground(new java.awt.Color(255, 255, 255));
-        a6.setText("jButton6");
+        a6.setActionCommand("05");
 
         a7.setBackground(new java.awt.Color(153, 153, 153));
-        a7.setText("jButton7");
+        a7.setActionCommand("06");
 
         a8.setBackground(new java.awt.Color(255, 255, 255));
-        a8.setText("jButton8");
+        a8.setActionCommand("07");
 
         b1.setBackground(new java.awt.Color(255, 255, 255));
-        b1.setText("jButton9");
+        b1.setActionCommand("10");
 
         b2.setBackground(new java.awt.Color(153, 153, 153));
-        b2.setText("jButton10");
+        b2.setActionCommand("11");
 
         b3.setBackground(new java.awt.Color(255, 255, 255));
-        b3.setText("jButton11");
+        b3.setActionCommand("12");
 
         b4.setBackground(new java.awt.Color(153, 153, 153));
-        b4.setText("jButton12");
+        b4.setActionCommand("13");
 
         b5.setBackground(new java.awt.Color(255, 255, 255));
-        b5.setText("jButton1");
+        b5.setActionCommand("14");
 
         b6.setBackground(new java.awt.Color(153, 153, 153));
-        b6.setText("jButton1");
+        b6.setActionCommand("15");
 
         b7.setBackground(new java.awt.Color(255, 255, 255));
-        b7.setText("jButton1");
+        b7.setActionCommand("16");
 
         b8.setBackground(new java.awt.Color(153, 153, 153));
-        b8.setText("jButton1");
+        b8.setActionCommand("17");
 
         c1.setBackground(new java.awt.Color(153, 153, 153));
-        c1.setText("jButton1");
+        c1.setActionCommand("20");
 
         c2.setBackground(new java.awt.Color(255, 255, 255));
-        c2.setText("jButton2");
+        c2.setActionCommand("21");
 
         c3.setBackground(new java.awt.Color(153, 153, 153));
-        c3.setText("jButton3");
+        c3.setActionCommand("22");
 
         c4.setBackground(new java.awt.Color(255, 255, 255));
-        c4.setText("jButton4");
+        c4.setActionCommand("23");
 
         c5.setBackground(new java.awt.Color(153, 153, 153));
-        c5.setText("jButton5");
+        c5.setActionCommand("24");
 
         c6.setBackground(new java.awt.Color(255, 255, 255));
-        c6.setText("jButton6");
+        c6.setActionCommand("25");
 
         c7.setBackground(new java.awt.Color(153, 153, 153));
-        c7.setText("jButton7");
+        c7.setActionCommand("26");
 
         c8.setBackground(new java.awt.Color(255, 255, 255));
-        c8.setText("jButton8");
+        c8.setActionCommand("27");
 
         d1.setBackground(new java.awt.Color(255, 255, 255));
-        d1.setText("jButton1");
+        d1.setActionCommand("30");
 
         d2.setBackground(new java.awt.Color(153, 153, 153));
-        d2.setText("jButton2");
+        d2.setActionCommand("31");
 
         d3.setBackground(new java.awt.Color(255, 255, 255));
-        d3.setText("jButton3");
+        d3.setActionCommand("32");
 
         d4.setBackground(new java.awt.Color(153, 153, 153));
-        d4.setText("jButton4");
+        d4.setActionCommand("33");
 
         d5.setBackground(new java.awt.Color(255, 255, 255));
-        d5.setText("jButton5");
+        d5.setActionCommand("34");
 
         d6.setBackground(new java.awt.Color(153, 153, 153));
-        d6.setText("jButton6");
+        d6.setActionCommand("35");
 
         d7.setBackground(new java.awt.Color(255, 255, 255));
-        d7.setText("jButton7");
+        d7.setActionCommand("36");
 
         d8.setBackground(new java.awt.Color(153, 153, 153));
-        d8.setText("jButton8");
+        d8.setActionCommand("37");
 
         e1.setBackground(new java.awt.Color(153, 153, 153));
-        e1.setText("jButton1");
+        e1.setActionCommand("40");
 
         e2.setBackground(new java.awt.Color(255, 255, 255));
-        e2.setText("jButton2");
+        e2.setActionCommand("41");
 
         e3.setBackground(new java.awt.Color(153, 153, 153));
-        e3.setText("jButton3");
+        e3.setActionCommand("42");
 
         e4.setBackground(new java.awt.Color(255, 255, 255));
-        e4.setText("jButton4");
+        e4.setActionCommand("43");
 
         e5.setBackground(new java.awt.Color(153, 153, 153));
-        e5.setText("jButton5");
+        e5.setActionCommand("44");
 
         e6.setBackground(new java.awt.Color(255, 255, 255));
-        e6.setText("jButton6");
+        e6.setActionCommand("45");
 
         e7.setBackground(new java.awt.Color(153, 153, 153));
-        e7.setText("jButton7");
+        e7.setActionCommand("46");
 
         e8.setBackground(new java.awt.Color(255, 255, 255));
-        e8.setText("jButton8");
+        e8.setActionCommand("47");
 
         f1.setBackground(new java.awt.Color(255, 255, 255));
-        f1.setText("jButton1");
+        f1.setActionCommand("50");
 
         f2.setBackground(new java.awt.Color(153, 153, 153));
-        f2.setText("jButton2");
+        f2.setActionCommand("51");
 
         f3.setBackground(new java.awt.Color(255, 255, 255));
-        f3.setText("jButton3");
+        f3.setActionCommand("52");
 
         f4.setBackground(new java.awt.Color(153, 153, 153));
-        f4.setText("jButton4");
+        f4.setActionCommand("53");
 
         f5.setBackground(new java.awt.Color(255, 255, 255));
-        f5.setText("jButton5");
+        f5.setActionCommand("54");
 
         f6.setBackground(new java.awt.Color(153, 153, 153));
-        f6.setText("jButton6");
+        f6.setActionCommand("55");
 
         f7.setBackground(new java.awt.Color(255, 255, 255));
-        f7.setText("jButton7");
+        f7.setActionCommand("56");
 
         f8.setBackground(new java.awt.Color(153, 153, 153));
-        f8.setText("jButton8");
+        f8.setActionCommand("57");
 
         g1.setBackground(new java.awt.Color(153, 153, 153));
-        g1.setText("jButton1");
+        g1.setActionCommand("60");
 
         g2.setBackground(new java.awt.Color(255, 255, 255));
-        g2.setText("jButton2");
+        g2.setActionCommand("61");
 
         g3.setBackground(new java.awt.Color(153, 153, 153));
-        g3.setText("jButton3");
+        g3.setActionCommand("62");
 
         g4.setBackground(new java.awt.Color(255, 255, 255));
-        g4.setText("jButton4");
+        g4.setActionCommand("63");
 
         g5.setBackground(new java.awt.Color(153, 153, 153));
-        g5.setText("jButton5");
+        g5.setActionCommand("64");
 
         g6.setBackground(new java.awt.Color(255, 255, 255));
-        g6.setText("jButton6");
+        g6.setActionCommand("65");
 
         g7.setBackground(new java.awt.Color(153, 153, 153));
-        g7.setText("jButton7");
+        g7.setActionCommand("66");
 
         g8.setBackground(new java.awt.Color(255, 255, 255));
-        g8.setText("jButton8");
+        g8.setActionCommand("67");
 
         h1.setBackground(new java.awt.Color(255, 255, 255));
-        h1.setText("jButton1");
+        h1.setActionCommand("70");
 
         h2.setBackground(new java.awt.Color(153, 153, 153));
-        h2.setText("jButton2");
+        h2.setActionCommand("71");
 
         h3.setBackground(new java.awt.Color(255, 255, 255));
-        h3.setText("jButton3");
+        h3.setActionCommand("72");
 
         h4.setBackground(new java.awt.Color(153, 153, 153));
-        h4.setText("jButton4");
+        h4.setActionCommand("73");
 
         h5.setBackground(new java.awt.Color(255, 255, 255));
-        h5.setText("jButton5");
+        h5.setActionCommand("74");
 
         h6.setBackground(new java.awt.Color(153, 153, 153));
-        h6.setText("jButton6");
+        h6.setActionCommand("75");
 
         h7.setBackground(new java.awt.Color(255, 255, 255));
-        h7.setText("jButton7");
+        h7.setActionCommand("76");
 
         h8.setBackground(new java.awt.Color(153, 153, 153));
-        h8.setText("jButton8");
+        h8.setActionCommand("77");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1559,18 +474,18 @@ public class BoardController extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(h1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE)
+                    .addComponent(h1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                     .addComponent(g1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(f1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(e1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(d1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(c1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(b1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(a1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE))
+                    .addComponent(a1, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(b2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(c2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, Short.MAX_VALUE)
+                    .addComponent(c2, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                     .addComponent(d2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(e2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(f2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)

@@ -14,8 +14,9 @@ package checkersapp;
  * Added movePlayed stub
  * 
  * Added getDisplayText    8/14/21
- * Removed dispayBoard (put in Board Controller)
- * Added BOARD_WIDTH constant
+ * Removed dispayBoard (put in Board Controller),
+ * Added initializeSquares,
+ * Added BOARD_WIDTH constant,
  */
 public class Board {
     
@@ -28,6 +29,17 @@ public class Board {
      * An array of squares to represent the board
      */
     private Square[][] maacSquares;
+    
+    /**
+     * Constructor for the board class
+     */
+    public Board()
+    {
+        // Initialize the square array
+        maacSquares = new Square[BOARD_WIDTH][BOARD_WIDTH];
+        
+        initializeSquares();
+    }
     
     /**
      * 
@@ -75,4 +87,43 @@ public class Board {
        }
        return lsText;
    }
+   
+   /**
+    * This function initializes the squares to the starting state of the game
+    */
+   private void initializeSquares()
+   {
+       for(int lnRow = 0; lnRow < BOARD_WIDTH; lnRow++)
+        {
+            for(int lnCol = 0; lnCol < BOARD_WIDTH; lnCol++)
+            {
+                // Initialize all squares
+                Color leSquareColor = Color.eeWHITE;
+                Color lePieceColor = null;
+                boolean lbPiecePresent = false;
+                if((lnRow + lnCol) % 2 == 0)
+                {
+                    //Change the color if the sum of the row and column is even
+                    leSquareColor = Color.eeBLACK;
+                    
+                    //Black squares have the pieces so check if there is a 
+                    //piece on the square (based on the row)
+                    if(lnRow < 3) // White rows
+                    {
+                        lePieceColor = Color.eeWHITE;
+                        lbPiecePresent = true;
+                    }
+                    else if(lnRow > 4) // Black rows
+                    {
+                        lePieceColor = Color.eeBLACK;
+                        lbPiecePresent = true;
+                    }
+                }
+                
+                // Set the square color, row, col, and piece info
+                maacSquares[lnRow][lnCol] = new Square(lbPiecePresent, lePieceColor, leSquareColor, lnRow, lnCol);
+            }
+        }
+   }
+   
 }

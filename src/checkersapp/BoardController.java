@@ -48,7 +48,7 @@ public class BoardController extends javax.swing.JFrame {
     /**
      * An array of buttons that handle events from the user
      */
-    private javax.swing.JButton[][] maacSquares;
+    private javax.swing.JButton[][] maacSquareButtons;
 
     /**
      * Creates new BoardController
@@ -63,78 +63,78 @@ public class BoardController extends javax.swing.JFrame {
         mcBoard = acNewBoard;
         
         // Initialize the array of Buttons
-        maacSquares = new javax.swing.JButton[8][8];
-        maacSquares[0][0] = a1;
-        maacSquares[0][1] = a2;
-        maacSquares[0][2] = a3;
-        maacSquares[0][3] = a4;
-        maacSquares[0][4] = a5;
-        maacSquares[0][5] = a6;
-        maacSquares[0][6] = a7;
-        maacSquares[0][7] = a8;
+        maacSquareButtons = new javax.swing.JButton[8][8];
+        maacSquareButtons[0][0] = a1;
+        maacSquareButtons[0][1] = a2;
+        maacSquareButtons[0][2] = a3;
+        maacSquareButtons[0][3] = a4;
+        maacSquareButtons[0][4] = a5;
+        maacSquareButtons[0][5] = a6;
+        maacSquareButtons[0][6] = a7;
+        maacSquareButtons[0][7] = a8;
         
-        maacSquares[1][0] = b1;
-        maacSquares[1][1] = b2;
-        maacSquares[1][2] = b3;
-        maacSquares[1][3] = b4;
-        maacSquares[1][4] = b5;
-        maacSquares[1][5] = b6;
-        maacSquares[1][6] = b7;
-        maacSquares[1][7] = b8;
+        maacSquareButtons[1][0] = b1;
+        maacSquareButtons[1][1] = b2;
+        maacSquareButtons[1][2] = b3;
+        maacSquareButtons[1][3] = b4;
+        maacSquareButtons[1][4] = b5;
+        maacSquareButtons[1][5] = b6;
+        maacSquareButtons[1][6] = b7;
+        maacSquareButtons[1][7] = b8;
         
-        maacSquares[2][0] = c1;
-        maacSquares[2][1] = c2;
-        maacSquares[2][2] = c3;
-        maacSquares[2][3] = c4;
-        maacSquares[2][4] = c5;
-        maacSquares[2][5] = c6;
-        maacSquares[2][6] = c7;
-        maacSquares[2][7] = c8;
+        maacSquareButtons[2][0] = c1;
+        maacSquareButtons[2][1] = c2;
+        maacSquareButtons[2][2] = c3;
+        maacSquareButtons[2][3] = c4;
+        maacSquareButtons[2][4] = c5;
+        maacSquareButtons[2][5] = c6;
+        maacSquareButtons[2][6] = c7;
+        maacSquareButtons[2][7] = c8;
         
-        maacSquares[3][0] = d1;
-        maacSquares[3][1] = d2;
-        maacSquares[3][2] = d3;
-        maacSquares[3][3] = d4;
-        maacSquares[3][4] = d5;
-        maacSquares[3][5] = d6;
-        maacSquares[3][6] = d7;
-        maacSquares[3][7] = d8;
+        maacSquareButtons[3][0] = d1;
+        maacSquareButtons[3][1] = d2;
+        maacSquareButtons[3][2] = d3;
+        maacSquareButtons[3][3] = d4;
+        maacSquareButtons[3][4] = d5;
+        maacSquareButtons[3][5] = d6;
+        maacSquareButtons[3][6] = d7;
+        maacSquareButtons[3][7] = d8;
         
-        maacSquares[4][0] = e1;
-        maacSquares[4][1] = e2;
-        maacSquares[4][2] = e3;
-        maacSquares[4][3] = e4;
-        maacSquares[4][4] = e5;
-        maacSquares[4][5] = e6;
-        maacSquares[4][6] = e7;
-        maacSquares[4][7] = e8;
+        maacSquareButtons[4][0] = e1;
+        maacSquareButtons[4][1] = e2;
+        maacSquareButtons[4][2] = e3;
+        maacSquareButtons[4][3] = e4;
+        maacSquareButtons[4][4] = e5;
+        maacSquareButtons[4][5] = e6;
+        maacSquareButtons[4][6] = e7;
+        maacSquareButtons[4][7] = e8;
         
-        maacSquares[5][0] = f1;
-        maacSquares[5][1] = f2;
-        maacSquares[5][2] = f3;
-        maacSquares[5][3] = f4;
-        maacSquares[5][4] = f5;
-        maacSquares[5][5] = f6;
-        maacSquares[5][6] = f7;
-        maacSquares[5][7] = f8;
+        maacSquareButtons[5][0] = f1;
+        maacSquareButtons[5][1] = f2;
+        maacSquareButtons[5][2] = f3;
+        maacSquareButtons[5][3] = f4;
+        maacSquareButtons[5][4] = f5;
+        maacSquareButtons[5][5] = f6;
+        maacSquareButtons[5][6] = f7;
+        maacSquareButtons[5][7] = f8;
         
-        maacSquares[6][0] = g1;
-        maacSquares[6][1] = g2;
-        maacSquares[6][2] = g3;
-        maacSquares[6][3] = g4;
-        maacSquares[6][4] = g5;
-        maacSquares[6][5] = g6;
-        maacSquares[6][6] = g7;
-        maacSquares[6][7] = g8;
+        maacSquareButtons[6][0] = g1;
+        maacSquareButtons[6][1] = g2;
+        maacSquareButtons[6][2] = g3;
+        maacSquareButtons[6][3] = g4;
+        maacSquareButtons[6][4] = g5;
+        maacSquareButtons[6][5] = g6;
+        maacSquareButtons[6][6] = g7;
+        maacSquareButtons[6][7] = g8;
         
-        maacSquares[7][0] = h1;
-        maacSquares[7][1] = h2;
-        maacSquares[7][2] = h3;
-        maacSquares[7][3] = h4;
-        maacSquares[7][4] = h5;
-        maacSquares[7][5] = h6;
-        maacSquares[7][6] = h7;
-        maacSquares[7][7] = h8;
+        maacSquareButtons[7][0] = h1;
+        maacSquareButtons[7][1] = h2;
+        maacSquareButtons[7][2] = h3;
+        maacSquareButtons[7][3] = h4;
+        maacSquareButtons[7][4] = h5;
+        maacSquareButtons[7][5] = h6;
+        maacSquareButtons[7][6] = h7;
+        maacSquareButtons[7][7] = h8;
         
         // Set variables that denote which square was previously selected
         mbIsSelected = false;
@@ -143,6 +143,9 @@ public class BoardController extends javax.swing.JFrame {
         
         // Create the Action Handlers for the squares
         createActionHandlers();
+        
+        // Display the board
+        displayBoard();
     }
     
     /**
@@ -150,11 +153,11 @@ public class BoardController extends javax.swing.JFrame {
      */
     private void displayBoard()
     {
-        for(int lnRow = 0; lnRow < mcBoard.BOARD_WIDTH; lnRow++)
+        for(int lnRow = 0; lnRow < Board.BOARD_WIDTH; lnRow++)
         {
-            for(int lnCol = 0; lnCol < mcBoard.BOARD_WIDTH; lnCol++)
+            for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
             {
-                maacSquares[lnRow][lnCol].setText(mcBoard.getDisplayText(lnRow, lnCol));
+                maacSquareButtons[lnRow][lnCol].setText(mcBoard.getDisplayText(lnRow, lnCol));
             }
         }
     }
@@ -162,11 +165,11 @@ public class BoardController extends javax.swing.JFrame {
     private void createActionHandlers()
     {
         // Create the action handlers for each square
-        for(int lnRow = 0; lnRow < mcBoard.BOARD_WIDTH; lnRow++)
+        for(int lnRow = 0; lnRow < Board.BOARD_WIDTH; lnRow++)
         {
-            for(int lnCol = 0; lnCol < mcBoard.BOARD_WIDTH; lnCol++)
+            for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
             {
-                maacSquares[lnRow][lnCol].addActionListener(new ActionListener() {
+                maacSquareButtons[lnRow][lnCol].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         // The action command contains the location of the 

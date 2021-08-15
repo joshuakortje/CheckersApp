@@ -27,7 +27,12 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="135" max="32767" attributes="0"/>
+              <EmptySpace pref="75" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="Player1Tag" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="Player2Tag" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
           </Group>
@@ -37,7 +42,14 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="Player2Tag" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="Player1Tag" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -56,91 +68,91 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="h1" alignment="0" pref="55" max="32767" attributes="0"/>
-                      <Component id="g1" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="f1" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="e1" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="d1" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="c1" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="b1" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="a1" pref="55" max="32767" attributes="0"/>
+                      <Component id="h1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b1" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="a1" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="b2" pref="0" max="32767" attributes="0"/>
-                      <Component id="c2" pref="55" max="32767" attributes="0"/>
-                      <Component id="d2" pref="0" max="32767" attributes="0"/>
-                      <Component id="e2" pref="0" max="32767" attributes="0"/>
-                      <Component id="f2" pref="0" max="32767" attributes="0"/>
-                      <Component id="g2" pref="0" max="32767" attributes="0"/>
-                      <Component id="h2" pref="0" max="32767" attributes="0"/>
-                      <Component id="a2" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="b2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="a2" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="a3" min="-2" pref="55" max="-2" attributes="0"/>
-                      <Component id="b3" pref="0" max="32767" attributes="0"/>
-                      <Component id="c3" pref="0" max="32767" attributes="0"/>
-                      <Component id="d3" pref="0" max="32767" attributes="0"/>
-                      <Component id="e3" pref="0" max="32767" attributes="0"/>
-                      <Component id="f3" pref="0" max="32767" attributes="0"/>
-                      <Component id="g3" pref="0" max="32767" attributes="0"/>
-                      <Component id="h3" pref="0" max="32767" attributes="0"/>
+                      <Component id="b3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h3" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="a4" min="-2" pref="55" max="-2" attributes="0"/>
-                      <Component id="b4" pref="0" max="32767" attributes="0"/>
-                      <Component id="c4" pref="0" max="32767" attributes="0"/>
-                      <Component id="d4" pref="0" max="32767" attributes="0"/>
-                      <Component id="e4" pref="0" max="32767" attributes="0"/>
-                      <Component id="f4" pref="0" max="32767" attributes="0"/>
-                      <Component id="g4" pref="0" max="32767" attributes="0"/>
-                      <Component id="h4" pref="0" max="32767" attributes="0"/>
+                      <Component id="b4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h4" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="a5" min="-2" pref="55" max="-2" attributes="0"/>
-                      <Component id="b5" pref="0" max="32767" attributes="0"/>
-                      <Component id="c5" pref="0" max="32767" attributes="0"/>
-                      <Component id="d5" pref="0" max="32767" attributes="0"/>
-                      <Component id="e5" pref="0" max="32767" attributes="0"/>
-                      <Component id="f5" pref="0" max="32767" attributes="0"/>
-                      <Component id="g5" pref="0" max="32767" attributes="0"/>
-                      <Component id="h5" pref="0" max="32767" attributes="0"/>
+                      <Component id="b5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h5" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="a6" min="-2" pref="55" max="-2" attributes="0"/>
-                      <Component id="b6" pref="0" max="32767" attributes="0"/>
-                      <Component id="c6" pref="0" max="32767" attributes="0"/>
-                      <Component id="d6" pref="0" max="32767" attributes="0"/>
-                      <Component id="e6" pref="0" max="32767" attributes="0"/>
-                      <Component id="f6" pref="0" max="32767" attributes="0"/>
-                      <Component id="g6" pref="0" max="32767" attributes="0"/>
-                      <Component id="h6" pref="0" max="32767" attributes="0"/>
+                      <Component id="b6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h6" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="a7" min="-2" pref="55" max="-2" attributes="0"/>
-                      <Component id="b7" pref="0" max="32767" attributes="0"/>
-                      <Component id="c7" pref="0" max="32767" attributes="0"/>
-                      <Component id="d7" pref="0" max="32767" attributes="0"/>
-                      <Component id="e7" pref="0" max="32767" attributes="0"/>
-                      <Component id="f7" pref="0" max="32767" attributes="0"/>
-                      <Component id="g7" pref="0" max="32767" attributes="0"/>
-                      <Component id="h7" pref="0" max="32767" attributes="0"/>
+                      <Component id="b7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h7" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="b8" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="c8" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="d8" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="e8" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="f8" alignment="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="g8" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="b8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
                       <Component id="h8" alignment="0" min="-2" pref="55" max="-2" attributes="0"/>
-                      <Component id="a8" pref="0" max="32767" attributes="0"/>
+                      <Component id="a8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -149,80 +161,80 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="h1" pref="55" max="32767" attributes="0"/>
-                      <Component id="h2" max="32767" attributes="0"/>
-                      <Component id="h3" alignment="1" max="32767" attributes="0"/>
-                      <Component id="h4" alignment="1" max="32767" attributes="0"/>
-                      <Component id="h5" alignment="1" max="32767" attributes="0"/>
-                      <Component id="h6" alignment="1" max="32767" attributes="0"/>
-                      <Component id="h7" alignment="1" max="32767" attributes="0"/>
-                      <Component id="h8" alignment="1" max="32767" attributes="0"/>
+                      <Component id="h1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h3" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h4" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h5" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h6" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h7" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="h8" alignment="1" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="g1" pref="55" max="32767" attributes="0"/>
-                      <Component id="g2" max="32767" attributes="0"/>
-                      <Component id="g3" max="32767" attributes="0"/>
-                      <Component id="g4" max="32767" attributes="0"/>
-                      <Component id="g5" max="32767" attributes="0"/>
-                      <Component id="g6" max="32767" attributes="0"/>
-                      <Component id="g7" max="32767" attributes="0"/>
-                      <Component id="g8" max="32767" attributes="0"/>
+                      <Component id="g1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="g8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="f1" pref="55" max="32767" attributes="0"/>
-                      <Component id="f2" max="32767" attributes="0"/>
-                      <Component id="f3" max="32767" attributes="0"/>
-                      <Component id="f4" max="32767" attributes="0"/>
-                      <Component id="f5" max="32767" attributes="0"/>
-                      <Component id="f6" max="32767" attributes="0"/>
-                      <Component id="f7" max="32767" attributes="0"/>
-                      <Component id="f8" max="32767" attributes="0"/>
+                      <Component id="f1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="f8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="e1" pref="55" max="32767" attributes="0"/>
-                      <Component id="e2" max="32767" attributes="0"/>
-                      <Component id="e3" max="32767" attributes="0"/>
-                      <Component id="e4" max="32767" attributes="0"/>
-                      <Component id="e5" max="32767" attributes="0"/>
-                      <Component id="e6" max="32767" attributes="0"/>
-                      <Component id="e7" max="32767" attributes="0"/>
-                      <Component id="e8" max="32767" attributes="0"/>
+                      <Component id="e1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="e8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="d1" pref="55" max="32767" attributes="0"/>
-                      <Component id="d2" max="32767" attributes="0"/>
-                      <Component id="d3" max="32767" attributes="0"/>
-                      <Component id="d4" max="32767" attributes="0"/>
-                      <Component id="d5" max="32767" attributes="0"/>
-                      <Component id="d6" max="32767" attributes="0"/>
-                      <Component id="d7" max="32767" attributes="0"/>
-                      <Component id="d8" max="32767" attributes="0"/>
+                      <Component id="d1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="d8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="c1" pref="55" max="32767" attributes="0"/>
-                      <Component id="c2" max="32767" attributes="0"/>
-                      <Component id="c3" max="32767" attributes="0"/>
-                      <Component id="c4" max="32767" attributes="0"/>
-                      <Component id="c5" max="32767" attributes="0"/>
-                      <Component id="c6" max="32767" attributes="0"/>
-                      <Component id="c7" max="32767" attributes="0"/>
-                      <Component id="c8" max="32767" attributes="0"/>
+                      <Component id="c1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="c8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="b1" pref="55" max="32767" attributes="0"/>
-                      <Component id="b2" max="32767" attributes="0"/>
-                      <Component id="b3" max="32767" attributes="0"/>
-                      <Component id="b4" max="32767" attributes="0"/>
-                      <Component id="b5" max="32767" attributes="0"/>
-                      <Component id="b6" max="32767" attributes="0"/>
-                      <Component id="b7" max="32767" attributes="0"/>
-                      <Component id="b8" max="32767" attributes="0"/>
+                      <Component id="b1" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b2" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b3" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b4" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b5" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b6" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b7" min="-2" pref="55" max="-2" attributes="0"/>
+                      <Component id="b8" min="-2" pref="55" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -756,5 +768,15 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JLabel" name="Player1Tag">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Player1"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="Player2Tag">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Player2"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

@@ -43,12 +43,9 @@ public class Board {
     
     /**
      * 
-     * @param anStartingRow the index of the starting row
-     * @param anStartingCol the index of the starting column
-     * @param anEndingRow the index of the ending row
-     * @param anEndingCol  the index of the ending column
+     * @param acCurrMove the move being played
      */
-    public void movePlayed(int anStartingRow, int anStartingCol, int anEndingRow, int anEndingCol)
+    public void movePlayed(Move acCurrMove)
     {
         System.out.println("A button was pressed...");
     }
@@ -76,7 +73,7 @@ public class Board {
        else
        {
            // Display W or B depending on the piece color
-           if(lcSquare.getPieceColor() == Color.eeWHITE)
+           if(lcSquare.getPieceColor() == CheckersColor.eeWHITE)
            {
                lsText = "W";
            }
@@ -98,24 +95,24 @@ public class Board {
             for(int lnCol = 0; lnCol < BOARD_WIDTH; lnCol++)
             {
                 // Initialize all squares
-                Color leSquareColor = Color.eeWHITE;
-                Color lePieceColor = null;
+                CheckersColor leSquareColor = CheckersColor.eeWHITE;
+                CheckersColor lePieceColor = null;
                 boolean lbPiecePresent = false;
                 if((lnRow + lnCol) % 2 == 0)
                 {
                     //Change the color if the sum of the row and column is even
-                    leSquareColor = Color.eeBLACK;
+                    leSquareColor = CheckersColor.eeBLACK;
                     
                     //Black squares have the pieces so check if there is a 
                     //piece on the square (based on the row)
                     if(lnRow < 3) // White rows
                     {
-                        lePieceColor = Color.eeWHITE;
+                        lePieceColor = CheckersColor.eeWHITE;
                         lbPiecePresent = true;
                     }
                     else if(lnRow > 4) // Black rows
                     {
-                        lePieceColor = Color.eeBLACK;
+                        lePieceColor = CheckersColor.eeBLACK;
                         lbPiecePresent = true;
                     }
                 }

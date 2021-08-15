@@ -1,8 +1,4 @@
 
 nbproject/private/private.xml
 nbproject/private/private.properties
-build/classes/checkersapp/Square.rs
-build/classes/checkersapp/BoardController.form
-build/classes/.netbeans_update_resources
-build/classes/.netbeans_automatic_build
-**/*.class
+build/*

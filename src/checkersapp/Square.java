@@ -9,7 +9,7 @@ package checkersapp;
  * Edits:
  * Initial version          12/17/19
  */
-enum Color
+enum CheckersColor
 {
     eeWHITE, eeBLACK;
 }
@@ -40,12 +40,12 @@ public class Square {
     /**
      * The Color of the piece (white or black)
      */
-    private Color mePieceColor;
+    private CheckersColor mePieceColor;
     
     /**
      * The Color of the square (white or black)
      */
-    private Color meSquareColor;
+    private CheckersColor meSquareColor;
     
     /**
      * The row of the square on the board from White's perspective (0-7).
@@ -66,7 +66,7 @@ public class Square {
      * @param anRow the row of the square
      * @param anCol the column of the square
      */
-    public Square(boolean abOccupied, Color aePieceColor, Color aeSquareColor, int anRow, int anCol)
+    public Square(boolean abOccupied, CheckersColor aePieceColor, CheckersColor aeSquareColor, int anRow, int anCol)
     {
         mbHasPiece = abOccupied;
         mePieceColor = aePieceColor;
@@ -80,7 +80,7 @@ public class Square {
      * 
      * @param acNewResident the new piece on the square (null if empty square)
      */
-    public void setPiece(Color aeNewPieceColor)
+    public void setPiece(CheckersColor aeNewPieceColor)
     {
         mePieceColor = aeNewPieceColor;
         
@@ -110,7 +110,7 @@ public class Square {
      * 
      * @return the color of the piece currently on the square. null if no piece 
      */
-    public Color getPieceColor()
+    public CheckersColor getPieceColor()
     {
         return mePieceColor;
     }
@@ -120,7 +120,7 @@ public class Square {
      * 
      * @return an enum representing the color of the square (eeWHITE or eeBLACK)
      */
-    public Color getSquareColor()
+    public CheckersColor getSquareColor()
     {
         return meSquareColor;
     }

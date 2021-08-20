@@ -9,14 +9,13 @@ package checkersapp;
  * Edits:
  * Initial version          12/17/19
  * 
- * Switch to checkers,      12/16/20
- * Added displayBoard,
- * Added movePlayed stub
+ * 12/16/20 Switch to checkers, added displayBoard, and
+ * added movePlayed stub
  * 
- * Added getDisplayText    8/14/21
- * Removed dispayBoard (put in Board Controller),
- * Added initializeSquares,
- * Added BOARD_WIDTH constant,
+ * 8/14/21 Added getDisplayText, Removed dispayBoard (put in Board Controller),
+ * Added initializeSquares, and added BOARD_WIDTH constant,
+ * 
+ * 8/20/21 Change getDisplayText to getLocalPieceColor
  */
 public class Board {
     
@@ -44,45 +43,42 @@ public class Board {
     /**
      * 
      * @param acCurrMove the move being played
+     * @return true if the move was successful
      */
-    public void movePlayed(Move acCurrMove)
+    public boolean movePlayed(Move acCurrMove)
     {
         System.out.println("A button was pressed...");
+        return true;
     }
     
     /**
-    * This method returns the text to display on the square denoted by the
+    * This method returns the color to display on the square denoted by the
     * given row and column based on if there 
     * is a white piece, black piece, or no piece on it.
     * 
     * @param anRow the row of the square
     * @param anCol the column of the square
     * 
-    * @return the text to display on the square
+    * @return the color of the piece if there is one, null if not
     */
-   public String getDisplayText(int anRow, int anCol)
+   public CheckersColor getLocalPieceColor(int anRow, int anCol)
    {
-       String lsText = "";
+       CheckersColor leColor = null; //default value if no piece is found
        Square lcSquare = maacSquares[anRow][anCol];
        
-       if(!lcSquare.hasPiece())
-       {
-           // Return nothing if the square has no piece
-           lsText = "";
-       }
-       else
+       if(lcSquare.hasPiece())
        {
            // Display W or B depending on the piece color
            if(lcSquare.getPieceColor() == CheckersColor.eeWHITE)
            {
-               lsText = "W";
+               leColor = CheckersColor.eeWHITE;
            }
            else
            {
-               lsText = "B";
+               leColor = CheckersColor.eeBLACK;
            }
        }
-       return lsText;
+       return leColor;
    }
    
    /**
@@ -122,5 +118,4 @@ public class Board {
             }
         }
    }
-   
 }

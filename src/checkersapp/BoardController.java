@@ -8,12 +8,12 @@
  * Edits:
  * Initial version          12/17/19
  * 
- * Switch to checkers,      12/16/20
- * Added button detection
+ * 12/16/20 Switch to checkers from chess and added button detection
  * 
- * Condensed Button handlers,  8/14/21
- * Moved display function to this class
+ * 8/14/21 Condensed Button handlers and moved display function to this class
  * 
+ * 8/20/21 Added getIconForColor, updated to use Images for pieces,
+ * added processUserSelection, added validatePieceSelection, added attemptMove
  * 
  * Images Used: 
  * white.png used from public domain, 
@@ -47,7 +47,15 @@ public class BoardController extends javax.swing.JFrame {
      */
     Board mcBoard;
         
-    final String msLabelText = "     ";
+    /**
+     * A reference to the White Piece icon
+     */
+    final ImageIcon mcWhiteIcon;
+    
+    /**
+     * A reference to the Black Piece icon
+     */
+    final ImageIcon mcBlackIcon;
     
     /**
      * A flag to indicate who's turn it is. (True if white)
@@ -63,7 +71,7 @@ public class BoardController extends javax.swing.JFrame {
     /**
      * An array of buttons that handle events from the user
      */
-    private javax.swing.JButton[][] maacSquareButtons;
+    private JButton[][] maacSquareButtons;
 
     /**
      * Creates new BoardController
@@ -155,23 +163,17 @@ public class BoardController extends javax.swing.JFrame {
         mcCurrentMove = null;
         mbIsWhiteTurn = true;
         
-        //Sample of white piece
+        //Set up the white piece icon
         ImageIcon lcIcon = new ImageIcon("src/checkersapp/images/white.jpg");
         Image pic = lcIcon.getImage();
-        ImageIcon lcNewIcon = new ImageIcon(pic.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-        a1.setIcon(lcNewIcon);
-        a1.setHorizontalTextPosition(JButton.CENTER);
-        a1.setVerticalTextPosition(JButton.CENTER);
-        a1.setText("K");
+        mcWhiteIcon = new ImageIcon(pic.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+        a1.setIcon(mcWhiteIcon);
         
-        //Sample of white piece
+        //Set up the black piece icon
         ImageIcon lcIcon2 = new ImageIcon("src/checkersapp/images/black.jpg");
         Image pic2 = lcIcon2.getImage();
-        ImageIcon lcNewIcon2 = new ImageIcon(pic2.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
-        a3.setIcon(lcNewIcon2);
-        a3.setHorizontalTextPosition(JButton.CENTER);
-        a3.setVerticalTextPosition(JButton.CENTER);
-        a3.setText("K");
+        mcBlackIcon = new ImageIcon(pic2.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
+        a3.setIcon(mcBlackIcon);
         
         Player1Tag.setText("White's Turn");
         Player2Tag.setText("");
@@ -193,7 +195,14 @@ public class BoardController extends javax.swing.JFrame {
         {
             for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
             {
-                //maacSquareButtons[lnRow][lnCol].setText(mcBoard.getDisplayText(lnRow, lnCol));
+                //Get the color of the piece at the square (null if none)
+                CheckersColor leLocalPieceColor = mcBoard.getLocalPieceColor(lnRow, lnCol);
+                
+                //Get the icon for the color of the piece (null if none)
+                ImageIcon lcLocalIcon = getIconForColor(leLocalPieceColor);
+                
+                //Set the icon on the GUI
+                maacSquareButtons[lnRow][lnCol].setIcon(lcLocalIcon);
             }
         }
         
@@ -208,6 +217,81 @@ public class BoardController extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * This function will determine if the user is selecting a piece or the 
+     * destination square and process the selection accordingly.
+     * 
+     * @param anRowSel the row selected
+     * @param anColSel the column selected
+     */
+    private void processUserSelection(int anRowSel, int anColSel)
+    {
+        // See if we have already selected another square
+        if(mcCurrentMove == null)
+        {
+            // If we have not, validate that the user selected one of 
+            // their pieces
+            validatePieceSelection(anRowSel, anColSel);
+        }
+        else
+        {
+            // If we have already selected a square, try to move
+            attemptMove(anRowSel, anColSel);
+        }
+    }
+    
+    /**
+     * This function makes sure the user selected a square with their piece on
+     * it. If they did, then a move is constructed with the color, and square 
+     * information to be used when the destination square is chosen.
+     * 
+     * @param anRow the row chosen
+     * @param anCol the column chosen
+     */
+    private void validatePieceSelection(int anRow, int anCol)
+    {
+        //figure out the color of the player
+        CheckersColor lePlayerColor = mbIsWhiteTurn ? CheckersColor.eeWHITE : CheckersColor.eeBLACK;
+        
+        //Validate that the player has a piece at this location
+        if(lePlayerColor == mcBoard.getLocalPieceColor(anRow, anCol))
+        {
+            // If so, construct the move with the current information
+            mcCurrentMove = new Move(lePlayerColor, anRow, anCol);
+        }
+    }
+    
+    /**
+     * This function will set the destination square of the move and 
+     * attempt to make the move on the board. If the move is made 
+     * successfully, the current player will be switched and the 
+     * board will be updated.
+     * 
+     * @param anDestRow the destination row
+     * @param anDestCol the destination column
+     */
+    private void attemptMove(int anDestRow, int anDestCol)
+    {
+        // Update the move and try to make the move
+        mcCurrentMove.setDestinationSquare(anDestRow, anDestCol);
+        boolean lbSuccess = mcBoard.movePlayed(mcCurrentMove);
+
+        // Change who's turn it is if the move was successful
+        if(lbSuccess)
+        {
+            mbIsWhiteTurn = !mbIsWhiteTurn;
+            updateDisplay();
+        }
+        
+        // Always null the current move because even if the move failed the
+        // player may want/need to select a different piece.
+        mcCurrentMove = null;
+    }
+    
+    /**
+     * Create the Action Handlers for each of the squares on the board. 
+     * This method only needs to be called once on startup.
+     */
     private void createActionHandlers()
     {
         // Create the action handlers for each square
@@ -223,24 +307,8 @@ public class BoardController extends javax.swing.JFrame {
                     int lnRowSel = Integer.parseInt(Character.toString(lsLocation.charAt(0)));
                     int lnColSel = Integer.parseInt(Character.toString(lsLocation.charAt(1)));
                     
-                    // See if we have already selected another square
-                    if(mcCurrentMove == null)
-                    {
-                        //construct the move if this is the first selected square
-                        //figure out the color of the player
-                        CheckersColor lePlayerColor = mbIsWhiteTurn ? CheckersColor.eeWHITE : CheckersColor.eeBLACK;
-                        mcCurrentMove = new Move(lePlayerColor, lnRowSel, lnColSel);
-                    }
-                    else
-                    {
-                        // if this is the 2nd square to select try to make a move
-                        mcCurrentMove.setDestinationSquare(lnRowSel, lnColSel);
-                        mcBoard.movePlayed(mcCurrentMove);
-                        mcCurrentMove = null;
-                        
-                        // Change who's turn it is
-                        mbIsWhiteTurn = !mbIsWhiteTurn;
-                    }
+                    // Process, validate, and carry out the user's selection
+                    processUserSelection(lnRowSel, lnColSel);
                 });
             }
         }
@@ -262,6 +330,45 @@ public class BoardController extends javax.swing.JFrame {
     {
         Player1Tag.setText("");
         Player2Tag.setText("Black's Turn");
+    }
+    
+    /**
+     * The function will return the ImageIcon graphic for the color of the 
+     * piece passed in. If null or some other non-color is passed in null is
+     * returned.
+     * 
+     * @param aeColor the color of the piece
+     * @return the ImageIcon associated with the color
+     */
+    private ImageIcon getIconForColor(CheckersColor aeColor)
+    {
+        //The icon to be returned
+        ImageIcon lcReturnIcon;
+        
+        // Determine the color and match with the correct icon
+        if(aeColor == null)
+        {
+            // No piece
+            lcReturnIcon = null;
+        }
+        else
+        {
+            switch (aeColor)
+            {
+                case eeWHITE:
+                    lcReturnIcon = mcWhiteIcon;
+                    break;
+                case eeBLACK:
+                    lcReturnIcon = mcBlackIcon;
+                    break;
+                default: // Should never happen
+                    lcReturnIcon = null;
+                    break;
+            }
+        }
+        
+        
+        return lcReturnIcon;
     }
 
     /**

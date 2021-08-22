@@ -16,6 +16,9 @@ package checkersapp;
  * Added initializeSquares, and added BOARD_WIDTH constant,
  * 
  * 8/20/21 Change getDisplayText to getLocalPieceColor
+ * 
+ * 8/22/21 Renamed movePlayed to attemptMove, added validation of the destination
+ * for basic moves (non-jumping)
  */
 public class Board {
     
@@ -43,12 +46,137 @@ public class Board {
     /**
      * 
      * @param acCurrMove the move being played
+     * 
      * @return true if the move was successful
      */
-    public boolean movePlayed(Move acCurrMove)
+    public boolean attemptMove(Move acCurrMove)
     {
-        System.out.println("A button was pressed...");
-        return true;
+        boolean lbMoveExecuted = false;
+        
+        // Check if the destination square is valid
+        if(validateMoveDest(acCurrMove))
+        {
+            // If it is valid, play the move
+            executeMove(acCurrMove);
+            lbMoveExecuted = true;
+        }
+        else
+        {
+            System.out.println("Invalid Move");
+        }
+        
+        return lbMoveExecuted;
+    }
+    
+    /**
+     * This subroutine checks if the destination square for the move is legal.
+     * It checks for a piece being at the square already as well as that the 
+     * piece would be moving in a legal manner (diagonally).
+     * 
+     * @param acCurrMove the move to be validated
+     * 
+     * @return true if the move is valid
+     */
+    private boolean validateMoveDest(Move acCurrMove)
+    {
+        boolean isValidSquare;
+        
+        // Get the rows/columns associated with the Move
+        int lnStartRow = acCurrMove.getStartRow();
+        int lnStartCol = acCurrMove.getStartCol();
+        int lnDestRow = acCurrMove.getDestRow();
+        int lnDestCol = acCurrMove.getDestCol();
+        
+        // Check if the destination square is occupied
+        if(getLocalPieceColor(lnDestRow, lnDestCol) != null)
+        {
+            isValidSquare = false;
+        }
+        else
+        {
+            // The math for checking valid moves is different for white 
+            // and black so check the player's color and if it is Black
+            // transform to White's perspective
+            if(acCurrMove.getPlayerColor() == CheckersColor.eeBLACK)
+            {
+                // Techniqually transforming the columns is not necessary 
+                // because the math to check the validity of the move will
+                // be the same but I still do it to avoid confusion
+                lnStartRow = transformPerspective(lnStartRow);
+                lnStartCol = transformPerspective(lnStartCol);
+                lnDestRow = transformPerspective(lnDestRow);
+                lnDestCol = transformPerspective(lnDestCol);
+            }
+            
+            // Validate the Move
+            isValidSquare = validateMove(lnStartRow, lnStartCol, lnDestRow, lnDestCol);
+        }
+        
+        // Return the result
+        return isValidSquare;
+    }
+    
+    /**
+     * This function will check if the squares indicate a valid move for the board
+     * from White's perspective. Moves for black must be transformed to White's
+     * perspective before using this function.
+     * The only valid moves are those that are moving diagonally by one or jumping over
+     * other pieces.
+     * 
+     * @param anStartRow the starting row
+     * @param anStartCol the starting column
+     * @param anDestRow the destination row
+     * @param anDestCol the destination column
+     * 
+     * @return true if the move is valid
+     */
+    private boolean validateMove(int anStartRow, int anStartCol,int  anDestRow, int anDestCol)
+    {
+        boolean isValid = true;
+        
+        // The piece must be moving forward by 1 row
+        if(anDestRow != (anStartRow + 1))
+        {
+            isValid = false;
+        }
+        
+        // The piece must be moving to an adjacent column (+-1)
+        if(Math.abs(anDestCol - anStartCol) != 1)
+        {
+            isValid = false;
+        }
+        
+        return isValid;
+    }
+    
+    /**
+     * This function will transform a row or column number from White's point of
+     * view to Black's or vice versa. 
+     * 
+     * @param anRowOrCol the row or column to be transformed
+     * 
+     * @return the transformed row or column
+     */
+    private int transformPerspective(int anRowOrCol)
+    {
+        return Math.abs(anRowOrCol - BOARD_WIDTH + 1);
+    }
+    
+    /**
+     * This function will actually perform the move. The function assumes that 
+     * the move has already been verified as playable. It will move the piece on
+     * the board, remove any captured pieces, and promote any piece that has 
+     * reached the end of the board.
+     * 
+     * @param anCurrMove the move to play
+     */
+    private void executeMove(Move anCurrMove)
+    {
+        // Remove the piece from the start square
+        maacSquares[anCurrMove.getStartRow()][anCurrMove.getStartCol()].setPiece(null);
+        
+        // Place the piece on the destination location
+        maacSquares[anCurrMove.getDestRow()][anCurrMove.getDestCol()].setPiece(anCurrMove.getPlayerColor());
     }
     
     /**

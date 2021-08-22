@@ -274,7 +274,7 @@ public class BoardController extends javax.swing.JFrame {
     {
         // Update the move and try to make the move
         mcCurrentMove.setDestinationSquare(anDestRow, anDestCol);
-        boolean lbSuccess = mcBoard.movePlayed(mcCurrentMove);
+        boolean lbSuccess = mcBoard.attemptMove(mcCurrentMove);
 
         // Change who's turn it is if the move was successful
         if(lbSuccess)
@@ -299,6 +299,9 @@ public class BoardController extends javax.swing.JFrame {
         {
             for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
             {
+                // TODO - Need to change to addMouseListener and use the 
+                // SwingUtilities.isRightMouseButton(e) function to check
+                // if the right/left button is pressed
                 maacSquareButtons[lnRow][lnCol].addActionListener((ActionEvent e) -> {
                     // The action command contains the location of the
                     // square that was selected. Parse it to get the

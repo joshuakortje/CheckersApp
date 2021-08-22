@@ -9,6 +9,8 @@ package checkersapp;
  * 
  * Edits:
  * Initial version          08/15/21
+ * 
+ * 08/22/21 Added getters for the row/column numbers and Color
  */
 public class Move {
     
@@ -63,5 +65,55 @@ public class Move {
     {
         mnDestRow = anRow;
         mnDestCol = anCol;
+    }
+    
+    /**
+     * Getter for the player color
+     * 
+     * @return the player color
+     */
+    public CheckersColor getPlayerColor()
+    {
+        return mePlayerColor;
+    }
+    
+    /**
+     * Getter for the starting row of the piece
+     * 
+     * @return the row
+     */
+    public int getStartRow()
+    {
+        return mnSelRow;
+    }
+    
+    /**
+     * Getter for the starting column of the piece
+     * 
+     * @return the column
+     */
+    public int getStartCol()
+    {
+        return mnSelCol;
+    }
+    
+    /**
+     * Getter for the destination row of the piece
+     * 
+     * @return the row
+     */
+    public int getDestRow()
+    {
+        return mnDestRow;
+    }
+    
+    /**
+     * Getter for the destination column of the piece
+     * 
+     * @return the column
+     */
+    public int getDestCol()
+    {
+        return mnDestCol;
     }
 }

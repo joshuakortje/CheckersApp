@@ -1,5 +1,8 @@
 package checkersapp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * This class represents the checkers board and handles the main board mechanics. 
  * 
@@ -28,17 +31,27 @@ public class Board {
     public static final int BOARD_WIDTH = 8;
     
     /**
-     * An array of squares to represent the board
+     * An array of squares to represent the board from white's perspective.
+     * This array will contain references to the same square objects as the 
+     * black squares array so that operations only have to be done on one array.
      */
-    private Square[][] maacSquares;
+    private Square[][] maacSquaresWhite;
+    
+    /**
+     * An array of squares to represent the board from black's perspective.
+     * This array will contain references to the same square objects as the 
+     * white squares array so that operations only have to be done on one array.
+     */
+    private Square[][] maacSquaresBlack;
     
     /**
      * Constructor for the board class
      */
     public Board()
     {
-        // Initialize the square array
-        maacSquares = new Square[BOARD_WIDTH][BOARD_WIDTH];
+        // Initialize the square arrays
+        maacSquaresWhite = new Square[BOARD_WIDTH][BOARD_WIDTH];
+        maacSquaresBlack = new Square[BOARD_WIDTH][BOARD_WIDTH];
         
         initializeSquares();
     }
@@ -94,6 +107,9 @@ public class Board {
         }
         else
         {
+            // Assume White's turn
+            Square[][] laacBoard = maacSquaresWhite;
+            
             // The math for checking valid moves is different for white 
             // and black so check the player's color and if it is Black
             // transform to White's perspective
@@ -106,10 +122,13 @@ public class Board {
                 lnStartCol = transformPerspective(lnStartCol);
                 lnDestRow = transformPerspective(lnDestRow);
                 lnDestCol = transformPerspective(lnDestCol);
+                
+                // Use the black board
+                laacBoard = maacSquaresBlack;
             }
             
             // Validate the Move
-            isValidSquare = validateMove(lnStartRow, lnStartCol, lnDestRow, lnDestCol);
+            isValidSquare = validateMove(lnStartRow, lnStartCol, lnDestRow, lnDestCol, laacBoard);
         }
         
         // Return the result
@@ -127,21 +146,80 @@ public class Board {
      * @param anStartCol the starting column
      * @param anDestRow the destination row
      * @param anDestCol the destination column
+     * @param aaacBoard the board to be used. This board will be from the perspective
+     *                  of the player whose turn it is
      * 
      * @return true if the move is valid
      */
-    private boolean validateMove(int anStartRow, int anStartCol,int  anDestRow, int anDestCol)
+    private boolean validateMove(int anStartRow, int anStartCol, int anDestRow, int anDestCol, Square[][] aaacBoard)
+    {
+        boolean isValid = false;
+        
+        if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 1))
+        {
+            isValid = true;
+        }
+        else
+        {
+            // check if the move is a jumping move. If it is, this function will
+            // return the locations of the jumped pieces. If not the arraylist
+            // will be empty
+            ArrayList<ArrayList<Integer>> laanJumpedPieces = checkJumpMove(anStartRow, anStartCol, anDestRow, anDestCol);
+            
+            // TODO: Need to actually return the jumped pieces list up the 
+            // call stack or remove the jumped pieces now
+            if(!laanJumpedPieces.isEmpty())
+            {
+                isValid = true;
+            }
+        }
+        
+        return isValid;
+    }
+    
+    private ArrayList<ArrayList<Integer>> checkJumpMove(int anStartRow, int anStartCol, int  anDestRow, int anDestCol)
+    {
+        ArrayList<ArrayList<Integer>> laanJumpedPieces = new ArrayList<>();
+        
+        // Check if the diagonal distance is right
+        if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 2))
+        {
+            // Get the coordinates of the row and column between the start and 
+            // destination
+            int anMidRow = anStartRow + 1;
+            int anMidCol = anStartCol + (anDestCol - anStartCol)/2; // Accounts for the direction of the move.
+            
+            //TODO: check for a piece and the midpoint
+            //temp code to always pass
+            laanJumpedPieces.add(new ArrayList<>(Arrays.asList(anMidRow, anMidCol)));
+        }
+        return laanJumpedPieces;
+    }
+    
+    /**
+     * This function will check if the squares indicate a diagonal move has been 
+     * taken. This function does not check for pieces in the way or jumped over.
+     * 
+     * @param anStartRow the starting row
+     * @param anStartCol the starting column
+     * @param anDestRow the destination row
+     * @param anDestCol the destination column
+     * @param anStep the number of steps taken
+     * 
+     * @return true if the move is a basic diagonal move
+     */
+    private boolean isBasicMove(int anStartRow, int anStartCol, int anDestRow, int anDestCol, int anStep)
     {
         boolean isValid = true;
         
-        // The piece must be moving forward by 1 row
-        if(anDestRow != (anStartRow + 1))
+        // The piece must be moving forward by anstep row(s)
+        if(anDestRow != (anStartRow + anStep))
         {
             isValid = false;
         }
         
-        // The piece must be moving to an adjacent column (+-1)
-        if(Math.abs(anDestCol - anStartCol) != 1)
+        // The piece must be moving to an adjacent column (+-anstep)
+        if(Math.abs(anDestCol - anStartCol) != anStep)
         {
             isValid = false;
         }
@@ -166,23 +244,26 @@ public class Board {
      * This function will actually perform the move. The function assumes that 
      * the move has already been verified as playable. It will move the piece on
      * the board, remove any captured pieces, and promote any piece that has 
-     * reached the end of the board.
+     * reached the end of the board. This method will play the move on the white
+     * board and the black board will automatically get the update because it
+     * uses references to the same objects
      * 
      * @param anCurrMove the move to play
      */
     private void executeMove(Move anCurrMove)
     {
         // Remove the piece from the start square
-        maacSquares[anCurrMove.getStartRow()][anCurrMove.getStartCol()].setPiece(null);
+        maacSquaresWhite[anCurrMove.getStartRow()][anCurrMove.getStartCol()].setPiece(null);
         
         // Place the piece on the destination location
-        maacSquares[anCurrMove.getDestRow()][anCurrMove.getDestCol()].setPiece(anCurrMove.getPlayerColor());
+        maacSquaresWhite[anCurrMove.getDestRow()][anCurrMove.getDestCol()].setPiece(anCurrMove.getPlayerColor());
     }
     
     /**
     * This method returns the color to display on the square denoted by the
     * given row and column based on if there 
-    * is a white piece, black piece, or no piece on it.
+    * is a white piece, black piece, or no piece on it. This method only uses
+    * the white perspective board.
     * 
     * @param anRow the row of the square
     * @param anCol the column of the square
@@ -192,7 +273,7 @@ public class Board {
    public CheckersColor getLocalPieceColor(int anRow, int anCol)
    {
        CheckersColor leColor = null; //default value if no piece is found
-       Square lcSquare = maacSquares[anRow][anCol];
+       Square lcSquare = maacSquaresWhite[anRow][anCol];
        
        if(lcSquare.hasPiece())
        {
@@ -242,7 +323,12 @@ public class Board {
                 }
                 
                 // Set the square color, row, col, and piece info
-                maacSquares[lnRow][lnCol] = new Square(lbPiecePresent, lePieceColor, leSquareColor, lnRow, lnCol);
+                maacSquaresWhite[lnRow][lnCol] = new Square(lbPiecePresent, lePieceColor, leSquareColor, lnRow, lnCol);
+                
+                // Give the black square array the same square.
+                // This assignment needs to give this array a reference to the 
+                // same square object
+                maacSquaresBlack[transformPerspective(lnRow)][transformPerspective(lnCol)] = maacSquaresWhite[lnRow][lnCol];
             }
         }
    }

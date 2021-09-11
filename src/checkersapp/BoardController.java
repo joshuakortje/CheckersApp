@@ -15,6 +15,10 @@
  * 8/20/21 Added getIconForColor, updated to use Images for pieces,
  * added processUserSelection, added validatePieceSelection, added attemptMove
  * 
+ * 9/11/21 Changed ActionHandlers to MouseListeners to add support for detecting
+ * whether the left or right mouse button has been pressed. (did not add that
+ * functionality yet though)
+ * 
  * Images Used: 
  * white.png used from public domain, 
  * found at https://commons.wikimedia.org/wiki/File:Color-white.JPG
@@ -31,10 +35,14 @@
 package checkersapp;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -223,8 +231,9 @@ public class BoardController extends javax.swing.JFrame {
      * 
      * @param anRowSel the row selected
      * @param anColSel the column selected
+     * @param abIsRightClick true if the selection was a "right click"
      */
-    private void processUserSelection(int anRowSel, int anColSel)
+    private void processUserSelection(int anRowSel, int anColSel, boolean abIsRightClick)
     {
         // See if we have already selected another square
         if(mcCurrentMove == null)
@@ -237,6 +246,9 @@ public class BoardController extends javax.swing.JFrame {
         {
             // If we have already selected a square, try to move
             attemptMove(anRowSel, anColSel);
+            
+            // TODO: Use abIsRightClick to handle multiple moves.
+            // Use an array of the row and columns selected.
         }
     }
     
@@ -299,20 +311,31 @@ public class BoardController extends javax.swing.JFrame {
         {
             for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
             {
-                // TODO - Need to change to addMouseListener and use the 
-                // SwingUtilities.isRightMouseButton(e) function to check
-                // if the right/left button is pressed
-                maacSquareButtons[lnRow][lnCol].addActionListener((ActionEvent e) -> {
-                    // The action command contains the location of the
-                    // square that was selected. Parse it to get the
-                    // row and column.
-                    String lsLocation = e.getActionCommand();
-                    int lnRowSel = Integer.parseInt(Character.toString(lsLocation.charAt(0)));
-                    int lnColSel = Integer.parseInt(Character.toString(lsLocation.charAt(1)));
-                    
-                    // Process, validate, and carry out the user's selection
-                    processUserSelection(lnRowSel, lnColSel);
-                });
+                // Add the Mouse Listeners for each of the squares
+                maacSquareButtons[lnRow][lnCol].addMouseListener(
+                new MouseAdapter() 
+                    {
+
+                        // Need to override the mousePressed function to get the 
+                        // object that was clicked on
+                        @Override
+                        public void mousePressed(MouseEvent e) 
+                        {
+                            // The action command contains the location of the
+                            // square that was selected. Parse it to get the
+                            // row and column.
+                            JButton lcCurrButton = (JButton) e.getComponent();
+                            String lsLocation = lcCurrButton.getActionCommand();
+                            int lnRowSel = Integer.parseInt(Character.toString(lsLocation.charAt(0)));
+                            int lnColSel = Integer.parseInt(Character.toString(lsLocation.charAt(1)));
+
+                            boolean lbIsRightClick = SwingUtilities.isRightMouseButton(e);
+
+                            // Process, validate, and carry out the user's selection
+                            processUserSelection(lnRowSel, lnColSel, lbIsRightClick);
+                        }                    
+                    }
+                );
             }
         }
     }
@@ -511,6 +534,7 @@ public class BoardController extends javax.swing.JFrame {
         c2.setActionCommand("21");
 
         c3.setBackground(new java.awt.Color(153, 153, 153));
+        c3.setToolTipText("");
         c3.setActionCommand("22");
 
         c4.setBackground(new java.awt.Color(255, 255, 255));

@@ -22,6 +22,10 @@ import java.util.Arrays;
  * 
  * 8/22/21 Renamed movePlayed to attemptMove, added validation of the destination
  * for basic moves (non-jumping)
+ * 
+ * 9/11/21 Added class variable to keep track of jumped pieces. Implimented logic
+ * to make sure a piece of the correct color was being jumped and to remove jumped
+ * pieces.
  */
 public class Board {
     
@@ -43,6 +47,12 @@ public class Board {
      * white squares array so that operations only have to be done on one array.
      */
     private Square[][] maacSquaresBlack;
+    
+    /**
+     * A list of coordinates with pieces that will need to be removed should the 
+     * current move be played.
+     */
+    private ArrayList<ArrayList<Integer>> maanJumpedPieces;
     
     /**
      * Constructor for the board class
@@ -92,7 +102,7 @@ public class Board {
      */
     private boolean validateMoveDest(Move acCurrMove)
     {
-        boolean isValidSquare;
+        boolean lbIsValidSquare;
         
         // Get the rows/columns associated with the Move
         int lnStartRow = acCurrMove.getStartRow();
@@ -103,7 +113,7 @@ public class Board {
         // Check if the destination square is occupied
         if(getLocalPieceColor(lnDestRow, lnDestCol) != null)
         {
-            isValidSquare = false;
+            lbIsValidSquare = false;
         }
         else
         {
@@ -128,11 +138,11 @@ public class Board {
             }
             
             // Validate the Move
-            isValidSquare = validateMove(lnStartRow, lnStartCol, lnDestRow, lnDestCol, laacBoard);
+            lbIsValidSquare = validateMove(lnStartRow, lnStartCol, lnDestRow, lnDestCol, laacBoard);
         }
         
         // Return the result
-        return isValidSquare;
+        return lbIsValidSquare;
     }
     
     /**
@@ -153,47 +163,63 @@ public class Board {
      */
     private boolean validateMove(int anStartRow, int anStartCol, int anDestRow, int anDestCol, Square[][] aaacBoard)
     {
-        boolean isValid = false;
+        boolean lbValid = false;
         
         if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 1))
         {
-            isValid = true;
+            lbValid = true;
         }
         else
         {
             // check if the move is a jumping move. If it is, this function will
             // return the locations of the jumped pieces. If not the arraylist
             // will be empty
-            ArrayList<ArrayList<Integer>> laanJumpedPieces = checkJumpMove(anStartRow, anStartCol, anDestRow, anDestCol);
-            
-            // TODO: Need to actually return the jumped pieces list up the 
-            // call stack or remove the jumped pieces now
-            if(!laanJumpedPieces.isEmpty())
-            {
-                isValid = true;
-            }
+            lbValid = checkJumpMove(anStartRow, anStartCol, anDestRow, anDestCol, aaacBoard);
         }
         
-        return isValid;
+        return lbValid;
     }
     
-    private ArrayList<ArrayList<Integer>> checkJumpMove(int anStartRow, int anStartCol, int  anDestRow, int anDestCol)
+    /**
+     * This function will check if the move is a valid move jumping over pieces.
+     * Any pieces found will be added to the ArrayList of Squares with pieces that
+     * have been jumped so they can be removed from the board in the execution 
+     * phase of the move.
+     * 
+     * @param anStartRow the starting row
+     * @param anStartCol the starting column
+     * @param anDestRow the destination row
+     * @param anDestCol the destination column
+     * @param aaacBoard the board to be used from the current player's perspective
+     * 
+     * @return true if the move is valid
+     */
+    private boolean checkJumpMove(int anStartRow, int anStartCol, int  anDestRow, int anDestCol, Square[][] aaacBoard)
     {
-        ArrayList<ArrayList<Integer>> laanJumpedPieces = new ArrayList<>();
+        boolean lbValid = false;
+        
+        // Reset the Jumped Pieces array
+        maanJumpedPieces = new ArrayList<>();
         
         // Check if the diagonal distance is right
         if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 2))
         {
             // Get the coordinates of the row and column between the start and 
             // destination
-            int anMidRow = anStartRow + 1;
-            int anMidCol = anStartCol + (anDestCol - anStartCol)/2; // Accounts for the direction of the move.
+            int lnMidRow = anStartRow + 1;
+            int lnMidCol = anStartCol + (anDestCol - anStartCol)/2; // Accounts for the direction of the move.
             
-            //TODO: check for a piece and the midpoint
-            //temp code to always pass
-            laanJumpedPieces.add(new ArrayList<>(Arrays.asList(anMidRow, anMidCol)));
+            // Get the color of the piece being jumped over
+            CheckersColor leMidColor = aaacBoard[lnMidRow][lnMidCol].getPieceColor();
+            
+            // Make sure there is a piece and that it is of a different color
+            if(leMidColor != null && leMidColor != aaacBoard[anStartRow][anStartCol].getPieceColor())
+            {
+                maanJumpedPieces.add(new ArrayList<>(Arrays.asList(lnMidRow, lnMidCol)));
+                lbValid = true;
+            }
         }
-        return laanJumpedPieces;
+        return lbValid;
     }
     
     /**
@@ -257,6 +283,33 @@ public class Board {
         
         // Place the piece on the destination location
         maacSquaresWhite[anCurrMove.getDestRow()][anCurrMove.getDestCol()].setPiece(anCurrMove.getPlayerColor());
+        
+        // Only if we have pieces to remove
+        if(maanJumpedPieces != null)
+        {
+            Square[][] laacBoard;
+
+            // Choose the correct board
+            if(anCurrMove.getPlayerColor() == CheckersColor.eeWHITE)
+            {
+                laacBoard = maacSquaresWhite;
+            }
+            else
+            {
+                laacBoard = maacSquaresBlack;
+            }
+
+            // Remove any jumped pieces
+
+            for(ArrayList<Integer> lanJumpedPieceLoc : maanJumpedPieces)
+            {
+                //  The format of the location is always (row, col)
+                laacBoard[lanJumpedPieceLoc.get(0)][lanJumpedPieceLoc.get(1)].setPiece(null);
+            }
+
+            // Set the jumped pieces array to be null (clean slate for next move)
+            maanJumpedPieces = null;
+        }
     }
     
     /**

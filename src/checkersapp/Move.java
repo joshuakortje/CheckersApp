@@ -1,5 +1,7 @@
 package checkersapp;
 
+import java.util.ArrayList;
+
 /**
  * This class represents a single move. It contains the source and destination
  * square coordinates and the player who is making the move.
@@ -10,34 +12,27 @@ package checkersapp;
  * Edits:
  * Initial version          08/15/21
  * 
- * 08/22/21 Added getters for the row/column numbers and Color
+ * 8/22/21 Added getters for the row/column numbers and Color
+ * 
+ * 9/19/21 Switched to the ArrayList implementation of rows and columns to 
+ * move towards accounting for multi-jump moves.
  */
 public class Move {
     
     /**
-     * The Color of the player making the move
+     * The Color of the player making the move.
      */
     CheckersColor mePlayerColor;
     
     /**
-     * The 1st Row selected
+     * A list of the rows selected in order from the start to the destination.
      */
-    int mnSelRow;
+    private ArrayList<Integer> manSelRow;
     
     /**
-     * The 1st Column selected
+     * A list of the columns selected in order from the start to the destination.
      */
-    int mnSelCol;
-    
-    /**
-     * The Destination Row
-     */
-    int mnDestRow;
-    
-    /**
-     * The Destination Column
-     */
-    int mnDestCol;
+    private ArrayList<Integer> manSelCol;
     
     /**
      * Constructor for the Move class
@@ -49,22 +44,22 @@ public class Move {
     public Move(CheckersColor anPlayerColor, int anRow, int anCol)
     {
         mePlayerColor = anPlayerColor;
-        mnSelRow = anRow;
-        mnSelCol = anCol;
-        mnDestRow = -1;
-        mnDestCol = -1;
+        manSelRow = new ArrayList<>();
+        manSelRow.add(anRow);
+        manSelCol = new ArrayList<>();
+        manSelCol.add(anCol);
     }
     
     /**
-     * Set the destination square for the move
+     * Add a destination square for the move
      * 
      * @param anRow the destination row
      * @param anCol the destination column
      */
-    public void setDestinationSquare(int anRow, int anCol)
+    public void addDestinationSquare(int anRow, int anCol)
     {
-        mnDestRow = anRow;
-        mnDestCol = anCol;
+        manSelRow.add(anRow);
+        manSelCol.add(anCol);
     }
     
     /**
@@ -78,42 +73,22 @@ public class Move {
     }
     
     /**
-     * Getter for the starting row of the piece
+     * Getter for the rows of the move in order from start to destination
      * 
-     * @return the row
+     * @return an ArrayList of the rows
      */
-    public int getStartRow()
+    public ArrayList<Integer> getRows()
     {
-        return mnSelRow;
+        return manSelRow;
     }
     
     /**
-     * Getter for the starting column of the piece
+     * Getter for the columns of the move in order from start to destination
      * 
-     * @return the column
+     * @return an ArrayList of the columns
      */
-    public int getStartCol()
+    public ArrayList<Integer> getCols()
     {
-        return mnSelCol;
-    }
-    
-    /**
-     * Getter for the destination row of the piece
-     * 
-     * @return the row
-     */
-    public int getDestRow()
-    {
-        return mnDestRow;
-    }
-    
-    /**
-     * Getter for the destination column of the piece
-     * 
-     * @return the column
-     */
-    public int getDestCol()
-    {
-        return mnDestCol;
+        return manSelCol;
     }
 }

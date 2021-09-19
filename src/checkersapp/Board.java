@@ -23,9 +23,12 @@ import java.util.Arrays;
  * 8/22/21 Renamed movePlayed to attemptMove, added validation of the destination
  * for basic moves (non-jumping)
  * 
- * 9/11/21 Added class variable to keep track of jumped pieces. Implimented logic
+ * 9/11/21 Added class variable to keep track of jumped pieces. Implemented logic
  * to make sure a piece of the correct color was being jumped and to remove jumped
  * pieces.
+ * 
+ * 9/19/21 Adapted to handle arrays of rows and columns for multi-jump moves. 
+ * Added the transformPerspective function for ArrayLists.
  */
 public class Board {
     
@@ -76,8 +79,8 @@ public class Board {
     {
         boolean lbMoveExecuted = false;
         
-        // Check if the destination square is valid
-        if(validateMoveDest(acCurrMove))
+        // Check if the move is valid
+        if(validateMove(acCurrMove))
         {
             // If it is valid, play the move
             executeMove(acCurrMove);
@@ -93,53 +96,40 @@ public class Board {
     
     /**
      * This subroutine checks if the destination square for the move is legal.
-     * It checks for a piece being at the square already as well as that the 
-     * piece would be moving in a legal manner (diagonally).
+     * It checks for that the piece would be moving in a legal manner (diagonally).
      * 
      * @param acCurrMove the move to be validated
      * 
      * @return true if the move is valid
      */
-    private boolean validateMoveDest(Move acCurrMove)
+    private boolean validateMove(Move acCurrMove)
     {
         boolean lbIsValidSquare;
         
         // Get the rows/columns associated with the Move
-        int lnStartRow = acCurrMove.getStartRow();
-        int lnStartCol = acCurrMove.getStartCol();
-        int lnDestRow = acCurrMove.getDestRow();
-        int lnDestCol = acCurrMove.getDestCol();
+        ArrayList<Integer> lanRows = acCurrMove.getRows();
+        ArrayList<Integer> lanCols = acCurrMove.getCols();
         
-        // Check if the destination square is occupied
-        if(getLocalPieceColor(lnDestRow, lnDestCol) != null)
+        // Assume White's turn
+        Square[][] laacBoard = maacSquaresWhite;
+
+        // The math for checking valid moves is different for white 
+        // and black so check the player's color and if it is Black
+        // transform to White's perspective
+        if(acCurrMove.getPlayerColor() == CheckersColor.eeBLACK)
         {
-            lbIsValidSquare = false;
+            // Techniqually transforming the columns is not necessary 
+            // because the math to check the validity of the move will
+            // be the same but I still do it to avoid confusion
+            lanRows = transformPerspective(lanRows);
+            lanCols = transformPerspective(lanCols);
+
+            // Use the black board
+            laacBoard = maacSquaresBlack;
         }
-        else
-        {
-            // Assume White's turn
-            Square[][] laacBoard = maacSquaresWhite;
-            
-            // The math for checking valid moves is different for white 
-            // and black so check the player's color and if it is Black
-            // transform to White's perspective
-            if(acCurrMove.getPlayerColor() == CheckersColor.eeBLACK)
-            {
-                // Techniqually transforming the columns is not necessary 
-                // because the math to check the validity of the move will
-                // be the same but I still do it to avoid confusion
-                lnStartRow = transformPerspective(lnStartRow);
-                lnStartCol = transformPerspective(lnStartCol);
-                lnDestRow = transformPerspective(lnDestRow);
-                lnDestCol = transformPerspective(lnDestCol);
-                
-                // Use the black board
-                laacBoard = maacSquaresBlack;
-            }
-            
-            // Validate the Move
-            lbIsValidSquare = validateMove(lnStartRow, lnStartCol, lnDestRow, lnDestCol, laacBoard);
-        }
+
+        // Validate the Move
+        lbIsValidSquare = validateMovePattern(lanRows, lanCols, laacBoard);
         
         // Return the result
         return lbIsValidSquare;
@@ -152,20 +142,20 @@ public class Board {
      * The only valid moves are those that are moving diagonally by one or jumping over
      * other pieces.
      * 
-     * @param anStartRow the starting row
-     * @param anStartCol the starting column
-     * @param anDestRow the destination row
-     * @param anDestCol the destination column
+     * @param aanRows the rows in the move from start to destination
+     * @param aanCols the columns in the move from start to destination
      * @param aaacBoard the board to be used. This board will be from the perspective
      *                  of the player whose turn it is
      * 
      * @return true if the move is valid
      */
-    private boolean validateMove(int anStartRow, int anStartCol, int anDestRow, int anDestCol, Square[][] aaacBoard)
+    private boolean validateMovePattern(ArrayList<Integer> aanRows, ArrayList<Integer> aanCols, Square[][] aaacBoard)
     {
         boolean lbValid = false;
         
-        if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 1))
+        // TODO: Need to handle the list implementation of squares to account
+        // for multi-jumps
+        if(isBasicMove(aanRows.get(0), aanCols.get(0), aanRows.get(1), aanCols.get(1), 1))
         {
             lbValid = true;
         }
@@ -174,7 +164,7 @@ public class Board {
             // check if the move is a jumping move. If it is, this function will
             // return the locations of the jumped pieces. If not the arraylist
             // will be empty
-            lbValid = checkJumpMove(anStartRow, anStartCol, anDestRow, anDestCol, aaacBoard);
+            lbValid = checkJumpMove(aanRows.get(0), aanCols.get(0), aanRows.get(1), aanCols.get(1), aaacBoard);
         }
         
         return lbValid;
@@ -254,6 +244,27 @@ public class Board {
     }
     
     /**
+     * This function will transform a list of rows or columns from White's point
+     * of view to Blacks or vice versa.
+     * 
+     * @param aanRowOrCol a list of rows or columns to transform
+     * 
+     * @return the transformed list
+     */
+    private ArrayList<Integer> transformPerspective(ArrayList<Integer> aanRowOrCol)
+    {
+        ArrayList<Integer> lanTransformedRowOrCol = new ArrayList<>();
+        
+        // Loop through each number and transform it
+        for(Integer lnRowOrCol : aanRowOrCol)
+        {
+            lanTransformedRowOrCol.add(transformPerspective(lnRowOrCol));
+        }
+        
+        return lanTransformedRowOrCol;
+    }
+    
+    /**
      * This function will transform a row or column number from White's point of
      * view to Black's or vice versa. 
      * 
@@ -279,10 +290,14 @@ public class Board {
     private void executeMove(Move anCurrMove)
     {
         // Remove the piece from the start square
-        maacSquaresWhite[anCurrMove.getStartRow()][anCurrMove.getStartCol()].setPiece(null);
+        int lnStartRow = anCurrMove.getRows().get(0);
+        int lnStartCol = anCurrMove.getCols().get(0);
+        maacSquaresWhite[lnStartRow][lnStartCol].setPiece(null);
         
         // Place the piece on the destination location
-        maacSquaresWhite[anCurrMove.getDestRow()][anCurrMove.getDestCol()].setPiece(anCurrMove.getPlayerColor());
+        int lnDestRow = anCurrMove.getRows().get(anCurrMove.getRows().size() - 1);
+        int lnDestCol = anCurrMove.getCols().get(anCurrMove.getCols().size() - 1);
+        maacSquaresWhite[lnDestRow][lnDestCol].setPiece(anCurrMove.getPlayerColor());
         
         // Only if we have pieces to remove
         if(maanJumpedPieces != null)

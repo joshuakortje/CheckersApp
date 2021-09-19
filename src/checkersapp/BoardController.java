@@ -19,6 +19,8 @@
  * whether the left or right mouse button has been pressed. (did not add that
  * functionality yet though)
  * 
+ * 9/19/21 Added right click handling and adding to a list of squares for a move.
+ * 
  * Images Used: 
  * white.png used from public domain, 
  * found at https://commons.wikimedia.org/wiki/File:Color-white.JPG
@@ -35,9 +37,7 @@
 package checkersapp;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
@@ -244,11 +244,22 @@ public class BoardController extends javax.swing.JFrame {
         }
         else
         {
-            // If we have already selected a square, try to move
-            attemptMove(anRowSel, anColSel);
-            
-            // TODO: Use abIsRightClick to handle multiple moves.
-            // Use an array of the row and columns selected.
+            // Make sure there is not a piece on the selected square
+            if(mcBoard.getLocalPieceColor(anRowSel, anColSel) == null)
+            {
+                mcCurrentMove.addDestinationSquare(anRowSel, anColSel);
+                
+                // A left click signals that the move can be played now.
+                if(!abIsRightClick)
+                {
+                    attemptMove();
+                }
+            }
+            else
+            {
+                // Reset the move
+                mcCurrentMove = null;
+            }
         }
     }
     
@@ -274,18 +285,13 @@ public class BoardController extends javax.swing.JFrame {
     }
     
     /**
-     * This function will set the destination square of the move and 
-     * attempt to make the move on the board. If the move is made 
-     * successfully, the current player will be switched and the 
-     * board will be updated.
-     * 
-     * @param anDestRow the destination row
-     * @param anDestCol the destination column
+     * This function will attempt to make the move on the board. 
+     * If the move is made successfully, the current player 
+     * will be switched and the board will be updated.
      */
-    private void attemptMove(int anDestRow, int anDestCol)
+    private void attemptMove()
     {
-        // Update the move and try to make the move
-        mcCurrentMove.setDestinationSquare(anDestRow, anDestCol);
+        // Try to make the move
         boolean lbSuccess = mcBoard.attemptMove(mcCurrentMove);
 
         // Change who's turn it is if the move was successful

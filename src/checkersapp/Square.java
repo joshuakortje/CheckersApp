@@ -14,6 +14,9 @@ enum CheckersColor
     eeWHITE, eeBLACK;
 }
 
+//TODO: Add Kings and a Game class to keep track of game state info like moves
+// number of captured pieces, etc.
+
 /**
  * This class represents a single square of the checkers board and information about
  * where on the board it is and what piece is currently on it. 

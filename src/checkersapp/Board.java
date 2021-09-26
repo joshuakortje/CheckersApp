@@ -29,6 +29,8 @@ import java.util.Arrays;
  * 
  * 9/19/21 Adapted to handle arrays of rows and columns for multi-jump moves. 
  * Added the transformPerspective function for ArrayLists.
+ * 
+ * 9/26/21 Handled muti-jump moves. 
  */
 public class Board {
     
@@ -110,6 +112,9 @@ public class Board {
         ArrayList<Integer> lanRows = acCurrMove.getRows();
         ArrayList<Integer> lanCols = acCurrMove.getCols();
         
+        // Reset the Jumped Pieces array
+        maanJumpedPieces = new ArrayList<>();
+        
         // Assume White's turn
         Square[][] laacBoard = maacSquaresWhite;
 
@@ -129,33 +134,84 @@ public class Board {
         }
 
         // Validate the Move
-        lbIsValidSquare = validateMovePattern(lanRows, lanCols, laacBoard);
+        lbIsValidSquare = validateMoveList(lanRows, lanCols, laacBoard);
         
         // Return the result
         return lbIsValidSquare;
     }
     
     /**
-     * This function will check if the squares indicate a valid move for the board
+     * This function will loop over all steps of the move and check each one for a valid pattern.
+     * This function will handle a move with multiple jumps due to jumping over 
+     * other pieces.
+     * 
+     * @param aanRows the list of rows in the move
+     * @param aanCols the list of columns in the move
+     * @param aaacBoard the board
+     * 
+     * @return true if the move sequence is valid
+     */
+    private boolean validateMoveList(ArrayList<Integer> aanRows, ArrayList<Integer> aanCols, Square[][] aaacBoard)
+    {
+        boolean lbValid = true;
+        
+        // check if this is not a multi-jump move
+        if(aanRows.size() == 2)
+        {
+            // Only one jump so check that
+            int lnStartRow = aanRows.get(0);
+            int lnStartCol = aanCols.get(0);
+            int lnEndRow = aanRows.get(1);
+            int lnEndCol = aanCols.get(1);
+            
+            lbValid = validateMovePattern(lnStartRow, lnStartCol, lnEndRow, lnEndCol, aaacBoard);
+        }
+        else // handle multi-jump moves
+        {
+            for(int lnJump = 0; lnJump < (aanRows.size() - 1); lnJump++)
+            {
+                // Get all of the locations for the given jump
+                int lnStartRow = aanRows.get(lnJump);
+                int lnStartCol = aanCols.get(lnJump);
+                int lnEndRow = aanRows.get(lnJump + 1);
+                int lnEndCol = aanCols.get(lnJump + 1);
+
+                // check if each step of the move is a valid pattern
+                // These moves must all be jump moves in order to be a valid multimove
+                // play
+                if(!checkJumpMove(lnStartRow, lnStartCol, lnEndRow, lnEndCol, aaacBoard))
+                {
+                    lbValid = false;
+                    break;
+                }
+            }
+        }
+        
+        return lbValid;
+    }
+    
+    /**
+     * This function will check if the squares indicate a valid move pattern for the board
      * from White's perspective. Moves for black must be transformed to White's
      * perspective before using this function.
      * The only valid moves are those that are moving diagonally by one or jumping over
      * other pieces.
      * 
-     * @param aanRows the rows in the move from start to destination
-     * @param aanCols the columns in the move from start to destination
+     * @param anStartRow the starting row
+     * @param anStartCol the starting column
+     * @param anEndRow the ending row
+     * @param anEndCol the ending column
      * @param aaacBoard the board to be used. This board will be from the perspective
      *                  of the player whose turn it is
      * 
      * @return true if the move is valid
      */
-    private boolean validateMovePattern(ArrayList<Integer> aanRows, ArrayList<Integer> aanCols, Square[][] aaacBoard)
+    private boolean validateMovePattern(int anStartRow, int anStartCol, int anEndRow, int anEndCol, Square[][] aaacBoard)
     {
-        boolean lbValid = false;
+        boolean lbValid;
         
-        // TODO: Need to handle the list implementation of squares to account
-        // for multi-jumps
-        if(isBasicMove(aanRows.get(0), aanCols.get(0), aanRows.get(1), aanCols.get(1), 1))
+        // check if it is a non-capturing move first
+        if(isBasicMove(anStartRow, anStartCol, anEndRow, anEndCol, 1))
         {
             lbValid = true;
         }
@@ -164,7 +220,7 @@ public class Board {
             // check if the move is a jumping move. If it is, this function will
             // return the locations of the jumped pieces. If not the arraylist
             // will be empty
-            lbValid = checkJumpMove(aanRows.get(0), aanCols.get(0), aanRows.get(1), aanCols.get(1), aaacBoard);
+            lbValid = checkJumpMove(anStartRow, anStartCol, anEndRow, anEndCol, aaacBoard);
         }
         
         return lbValid;
@@ -187,9 +243,6 @@ public class Board {
     private boolean checkJumpMove(int anStartRow, int anStartCol, int  anDestRow, int anDestCol, Square[][] aaacBoard)
     {
         boolean lbValid = false;
-        
-        // Reset the Jumped Pieces array
-        maanJumpedPieces = new ArrayList<>();
         
         // Check if the diagonal distance is right
         if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 2))

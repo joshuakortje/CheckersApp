@@ -1,7 +1,6 @@
 package checkersapp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This class represents the checkers board and handles the main board mechanics. 
@@ -31,6 +30,9 @@ import java.util.Arrays;
  * Added the transformPerspective function for ArrayLists.
  * 
  * 9/26/21 Handled muti-jump moves. 
+ * 
+ * 10/22/21 Added code to "King" pieces and check if a king is on a square. Also
+ * removed the logic for move validation and put it in the move class.
  */
 public class Board {
     
@@ -52,12 +54,6 @@ public class Board {
      * white squares array so that operations only have to be done on one array.
      */
     private Square[][] maacSquaresBlack;
-    
-    /**
-     * A list of coordinates with pieces that will need to be removed should the 
-     * current move be played.
-     */
-    private ArrayList<ArrayList<Integer>> maanJumpedPieces;
     
     /**
      * Constructor for the board class
@@ -112,9 +108,6 @@ public class Board {
         ArrayList<Integer> lanRows = acCurrMove.getRows();
         ArrayList<Integer> lanCols = acCurrMove.getCols();
         
-        // Reset the Jumped Pieces array
-        maanJumpedPieces = new ArrayList<>();
-        
         // Assume White's turn
         Square[][] laacBoard = maacSquaresWhite;
 
@@ -133,167 +126,12 @@ public class Board {
             laacBoard = maacSquaresBlack;
         }
 
-        // Validate the Move
-        lbIsValidSquare = validateMoveList(lanRows, lanCols, laacBoard);
+        // Update the squares and board with the (potentially) transformed value
+        acCurrMove.updateSquares(lanRows, lanCols, laacBoard);
+        lbIsValidSquare = acCurrMove.checkMove();
         
         // Return the result
         return lbIsValidSquare;
-    }
-    
-    /**
-     * This function will loop over all steps of the move and check each one for a valid pattern.
-     * This function will handle a move with multiple jumps due to jumping over 
-     * other pieces.
-     * 
-     * @param aanRows the list of rows in the move
-     * @param aanCols the list of columns in the move
-     * @param aaacBoard the board
-     * 
-     * @return true if the move sequence is valid
-     */
-    private boolean validateMoveList(ArrayList<Integer> aanRows, ArrayList<Integer> aanCols, Square[][] aaacBoard)
-    {
-        boolean lbValid = true;
-        
-        // check if this is not a multi-jump move
-        if(aanRows.size() == 2)
-        {
-            // Only one jump so check that
-            int lnStartRow = aanRows.get(0);
-            int lnStartCol = aanCols.get(0);
-            int lnEndRow = aanRows.get(1);
-            int lnEndCol = aanCols.get(1);
-            
-            lbValid = validateMovePattern(lnStartRow, lnStartCol, lnEndRow, lnEndCol, aaacBoard);
-        }
-        else // handle multi-jump moves
-        {
-            for(int lnJump = 0; lnJump < (aanRows.size() - 1); lnJump++)
-            {
-                // Get all of the locations for the given jump
-                int lnStartRow = aanRows.get(lnJump);
-                int lnStartCol = aanCols.get(lnJump);
-                int lnEndRow = aanRows.get(lnJump + 1);
-                int lnEndCol = aanCols.get(lnJump + 1);
-
-                // check if each step of the move is a valid pattern
-                // These moves must all be jump moves in order to be a valid multimove
-                // play
-                if(!checkJumpMove(lnStartRow, lnStartCol, lnEndRow, lnEndCol, aaacBoard))
-                {
-                    lbValid = false;
-                    break;
-                }
-            }
-        }
-        
-        return lbValid;
-    }
-    
-    /**
-     * This function will check if the squares indicate a valid move pattern for the board
-     * from White's perspective. Moves for black must be transformed to White's
-     * perspective before using this function.
-     * The only valid moves are those that are moving diagonally by one or jumping over
-     * other pieces.
-     * 
-     * @param anStartRow the starting row
-     * @param anStartCol the starting column
-     * @param anEndRow the ending row
-     * @param anEndCol the ending column
-     * @param aaacBoard the board to be used. This board will be from the perspective
-     *                  of the player whose turn it is
-     * 
-     * @return true if the move is valid
-     */
-    private boolean validateMovePattern(int anStartRow, int anStartCol, int anEndRow, int anEndCol, Square[][] aaacBoard)
-    {
-        boolean lbValid;
-        
-        // check if it is a non-capturing move first
-        if(isBasicMove(anStartRow, anStartCol, anEndRow, anEndCol, 1))
-        {
-            lbValid = true;
-        }
-        else
-        {
-            // check if the move is a jumping move. If it is, this function will
-            // return the locations of the jumped pieces. If not the arraylist
-            // will be empty
-            lbValid = checkJumpMove(anStartRow, anStartCol, anEndRow, anEndCol, aaacBoard);
-        }
-        
-        return lbValid;
-    }
-    
-    /**
-     * This function will check if the move is a valid move jumping over pieces.
-     * Any pieces found will be added to the ArrayList of Squares with pieces that
-     * have been jumped so they can be removed from the board in the execution 
-     * phase of the move.
-     * 
-     * @param anStartRow the starting row
-     * @param anStartCol the starting column
-     * @param anDestRow the destination row
-     * @param anDestCol the destination column
-     * @param aaacBoard the board to be used from the current player's perspective
-     * 
-     * @return true if the move is valid
-     */
-    private boolean checkJumpMove(int anStartRow, int anStartCol, int  anDestRow, int anDestCol, Square[][] aaacBoard)
-    {
-        boolean lbValid = false;
-        
-        // Check if the diagonal distance is right
-        if(isBasicMove(anStartRow, anStartCol, anDestRow, anDestCol, 2))
-        {
-            // Get the coordinates of the row and column between the start and 
-            // destination
-            int lnMidRow = anStartRow + 1;
-            int lnMidCol = anStartCol + (anDestCol - anStartCol)/2; // Accounts for the direction of the move.
-            
-            // Get the color of the piece being jumped over
-            CheckersColor leMidColor = aaacBoard[lnMidRow][lnMidCol].getPieceColor();
-            
-            // Make sure there is a piece and that it is of a different color
-            if(leMidColor != null && leMidColor != aaacBoard[anStartRow][anStartCol].getPieceColor())
-            {
-                maanJumpedPieces.add(new ArrayList<>(Arrays.asList(lnMidRow, lnMidCol)));
-                lbValid = true;
-            }
-        }
-        return lbValid;
-    }
-    
-    /**
-     * This function will check if the squares indicate a diagonal move has been 
-     * taken. This function does not check for pieces in the way or jumped over.
-     * 
-     * @param anStartRow the starting row
-     * @param anStartCol the starting column
-     * @param anDestRow the destination row
-     * @param anDestCol the destination column
-     * @param anStep the number of steps taken
-     * 
-     * @return true if the move is a basic diagonal move
-     */
-    private boolean isBasicMove(int anStartRow, int anStartCol, int anDestRow, int anDestCol, int anStep)
-    {
-        boolean isValid = true;
-        
-        // The piece must be moving forward by anstep row(s)
-        if(anDestRow != (anStartRow + anStep))
-        {
-            isValid = false;
-        }
-        
-        // The piece must be moving to an adjacent column (+-anstep)
-        if(Math.abs(anDestCol - anStartCol) != anStep)
-        {
-            isValid = false;
-        }
-        
-        return isValid;
     }
     
     /**
@@ -351,32 +189,34 @@ public class Board {
         int lnDestRow = anCurrMove.getRows().get(anCurrMove.getRows().size() - 1);
         int lnDestCol = anCurrMove.getCols().get(anCurrMove.getCols().size() - 1);
         maacSquaresWhite[lnDestRow][lnDestCol].setPiece(anCurrMove.getPlayerColor());
+        maacSquaresWhite[lnDestRow][lnDestCol].setKing(anCurrMove.isPieceKing());
         
-        // Only if we have pieces to remove
-        if(maanJumpedPieces != null)
+        Square[][] laacBoard;
+
+        // Choose the correct board based on the player and check to see if the 
+        // piece that just moved needs to be kinged.
+        if(anCurrMove.getPlayerColor() == CheckersColor.eeWHITE)
         {
-            Square[][] laacBoard;
-
-            // Choose the correct board
-            if(anCurrMove.getPlayerColor() == CheckersColor.eeWHITE)
+            laacBoard = maacSquaresWhite;
+            if(lnDestRow == BOARD_WIDTH-1)
             {
-                laacBoard = maacSquaresWhite;
+                maacSquaresWhite[lnDestRow][lnDestCol].setKing(true);
             }
-            else
+        }
+        else
+        {
+            laacBoard = maacSquaresBlack;
+            if(lnDestRow == 0)
             {
-                laacBoard = maacSquaresBlack;
+                maacSquaresWhite[lnDestRow][lnDestCol].setKing(true);
             }
+        }
 
-            // Remove any jumped pieces
-
-            for(ArrayList<Integer> lanJumpedPieceLoc : maanJumpedPieces)
-            {
-                //  The format of the location is always (row, col)
-                laacBoard[lanJumpedPieceLoc.get(0)][lanJumpedPieceLoc.get(1)].setPiece(null);
-            }
-
-            // Set the jumped pieces array to be null (clean slate for next move)
-            maanJumpedPieces = null;
+        // Remove any jumped pieces
+        for(ArrayList<Integer> lanJumpedPieceLoc : anCurrMove.getJumpedPieces())
+        {
+            //  The format of the location is always (row, col)
+            laacBoard[lanJumpedPieceLoc.get(0)][lanJumpedPieceLoc.get(1)].setPiece(null);
         }
     }
     
@@ -409,6 +249,19 @@ public class Board {
            }
        }
        return leColor;
+   }
+   
+   /**
+    * This function checks if there is a king at the specified location
+    * 
+    * @param anRow the row of the square
+    * @param anCol the column of the square
+    * 
+    * @return true if there is a king
+    */
+   public boolean getLocalPieceKingStatus(int anRow, int anCol)
+   {
+       return maacSquaresWhite[anRow][anCol].hasKing();
    }
    
    /**

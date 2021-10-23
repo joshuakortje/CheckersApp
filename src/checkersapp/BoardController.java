@@ -21,6 +21,8 @@
  * 
  * 9/19/21 Added right click handling and adding to a list of squares for a move.
  * 
+ * 10/22/21 Added code to display if a King is on a square.
+ * 
  * Images Used: 
  * white.png used from public domain, 
  * found at https://commons.wikimedia.org/wiki/File:Color-white.JPG
@@ -167,6 +169,18 @@ public class BoardController extends javax.swing.JFrame {
         maacSquareButtons[7][6] = h7;
         maacSquareButtons[7][7] = h8;
         
+        // Set text parameters for all of the squares now so we don't have to
+        // worry about it during the game.
+        for(JButton[] lacButtonArray : maacSquareButtons)
+        {
+            for(JButton lcButton : lacButtonArray)
+            {
+                lcButton.setForeground(Color.RED);
+                lcButton.setHorizontalTextPosition(JButton.CENTER);
+                lcButton.setVerticalTextPosition(JButton.CENTER);
+            }
+        }
+        
         // Set variables that denote which square was previously selected
         mcCurrentMove = null;
         mbIsWhiteTurn = true;
@@ -211,8 +225,11 @@ public class BoardController extends javax.swing.JFrame {
                 
                 //Set the icon on the GUI
                 maacSquareButtons[lnRow][lnCol].setIcon(lcLocalIcon);
+                
+                //If the piece is a King display a K
+                maacSquareButtons[lnRow][lnCol].setText(getTextForKing(mcBoard.getLocalPieceKingStatus(lnRow, lnCol)));
             }
-        }
+        }        
         
         // Update the current player
         if(mbIsWhiteTurn)
@@ -280,7 +297,7 @@ public class BoardController extends javax.swing.JFrame {
         if(lePlayerColor == mcBoard.getLocalPieceColor(anRow, anCol))
         {
             // If so, construct the move with the current information
-            mcCurrentMove = new Move(lePlayerColor, anRow, anCol);
+            mcCurrentMove = new Move(lePlayerColor, anRow, anCol, mcBoard.getLocalPieceKingStatus(anRow, anCol));
         }
     }
     
@@ -401,6 +418,23 @@ public class BoardController extends javax.swing.JFrame {
         
         
         return lcReturnIcon;
+    }
+    
+    /**
+     * This function will return to text to be displayed on the Button
+     * 
+     * @param abIsKing true if there is a king on the square
+     * 
+     * @return the display text
+     */
+    private String getTextForKing(boolean abIsKing)
+    {
+        String lcAnswer = ""; // default (no king)
+        if(abIsKing)
+        {
+            lcAnswer = "K";
+        }
+        return lcAnswer;
     }
 
     /**

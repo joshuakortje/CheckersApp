@@ -8,13 +8,15 @@ package checkersapp;
  * 
  * Edits:
  * Initial version          12/17/19
+ * 
+ * 10/22/21 Added tracking if a king is on the square.
  */
 enum CheckersColor
 {
     eeWHITE, eeBLACK;
 }
 
-//TODO: Add Kings and a Game class to keep track of game state info like moves
+//TODO: Add Kings move logic and a Game class to keep track of game state info like moves
 // number of captured pieces, etc.
 
 /**
@@ -41,6 +43,13 @@ public class Square {
     private boolean mbHasPiece;
     
     /**
+     * A boolean indicating if the piece on the square is a king. It is up to
+     * the user of the class to set this variable to true when a king is moved 
+     * here. It is set to false automatically when a piece is removed.
+     */
+    private boolean mbHasKing;
+    
+    /**
      * The Color of the piece (white or black)
      */
     private CheckersColor mePieceColor;
@@ -48,17 +57,17 @@ public class Square {
     /**
      * The Color of the square (white or black)
      */
-    private CheckersColor meSquareColor;
+    private final CheckersColor meSquareColor;
     
     /**
      * The row of the square on the board from White's perspective (0-7).
      */
-    private int mnRow;
+    private final int mnRow;
     
     /**
      * The column of the square on the board from White's perspective (0-7).
      */
-    private int mnCol;
+    private final int mnCol;
     
     /**
      * Constructor for the square class.
@@ -76,12 +85,13 @@ public class Square {
         meSquareColor = aeSquareColor;
         mnRow = anRow;
         mnCol = anCol;
+        mbHasKing = false;
     }
     
     /**
      * This method will change the status of the piece currently on the square.
      * 
-     * @param acNewResident the new piece on the square (null if empty square)
+     * @param aeNewPieceColor the new piece on the square (null if empty square)
      */
     public void setPiece(CheckersColor aeNewPieceColor)
     {
@@ -91,11 +101,17 @@ public class Square {
         if(mePieceColor == null)
         {
             mbHasPiece = false;
+            setKing(false); // If there is no piece there can't be a king
         }
         else
         {
             mbHasPiece = true;
         }
+    }
+    
+    public void setKing(boolean abIsKing)
+    {
+        mbHasKing = abIsKing;
     }
     
     /**
@@ -106,6 +122,16 @@ public class Square {
     public boolean hasPiece()
     {
         return mbHasPiece;
+    }
+    
+    /**
+     * This method returns true if the piece here is a king
+     * 
+     * @return true if there is a king on the square
+     */
+    public boolean hasKing()
+    {
+        return mbHasKing;
     }
     
     /**

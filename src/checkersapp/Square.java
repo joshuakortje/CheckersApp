@@ -10,15 +10,29 @@ package checkersapp;
  * Initial version          12/17/19
  * 
  * 10/22/21 Added tracking if a king is on the square.
+ * 
+ * 9/1/25 Added ability to return display name
  */
-enum CheckersColor
-{
-    eeWHITE, eeBLACK;
+enum CheckersColor {
+    eeWHITE("White"),
+    eeBLACK("Black");
+
+    private final String displayName;
+
+    // Constructor
+    private CheckersColor(String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * This function returns the String name of the color.
+     * 
+     * @return String name of the color
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
 }
-
-//TODO: Add Kings move logic and a Game class to keep track of game state info like moves
-// number of captured pieces, etc.
-
 /**
  * This class represents a single square of the checkers board and information about
  * where on the board it is and what piece is currently on it. 

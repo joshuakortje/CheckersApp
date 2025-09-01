@@ -20,18 +20,20 @@ import java.util.Arrays;
  * 
  * 10/22/21 Added information about Kings and put the move validation logic in
  * this class instead of the Board class.
+ * 
+ * 9/1/25 Updated to allow kings to move backward.
  */
 public class Move {
     
     /**
      * The Color of the player making the move.
      */
-    private CheckersColor mePlayerColor;
+    final private CheckersColor mePlayerColor;
     
     /**
      * True if the jumping piece is a king.
      */
-    private boolean mbPieceIsKing;
+    final private boolean mbPieceIsKing;
     
     /**
      * A list of the rows selected in order from the start to the destination.
@@ -69,6 +71,7 @@ public class Move {
      * @param anPlayerColor the color of the player
      * @param anRow the selected row
      * @param anCol the selected column
+     * @param abPieceIsKing the selected piece is a king
      */
     public Move(CheckersColor anPlayerColor, int anRow, int anCol, boolean abPieceIsKing)
     {
@@ -213,7 +216,7 @@ public class Move {
         {
             // Get the coordinates of the row and column between the start and 
             // destination
-            int lnMidRow = anStartRow + 1;
+            int lnMidRow = anStartRow + (anDestRow - anStartRow)/2; // Allows for king moves
             int lnMidCol = anStartCol + (anDestCol - anStartCol)/2; // Accounts for the direction of the move.
             
             // Get the color of the piece being jumped over
@@ -245,8 +248,13 @@ public class Move {
     {
         boolean isValid = true;
         
-        // The piece must be moving forward by anstep row(s)
-        if(anDestRow != (anStartRow + anStep))
+        // If the piece is a king, then we check that the distance between the 
+        // rows is anStep. If the piece is not a king, it must also be moving forward.
+        if(mbPieceIsKing && (Math.abs(anDestRow - anStartRow) != anStep))
+        {
+            isValid = false;
+        }
+        else if(!mbPieceIsKing && ((anDestRow - anStartRow) != anStep))
         {
             isValid = false;
         }

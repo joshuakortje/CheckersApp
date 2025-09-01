@@ -23,6 +23,9 @@
  * 
  * 10/22/21 Added code to display if a King is on a square.
  * 
+ * 9/1/25 Added flag for 1 vs 2 player. Made a start menu and a implemented end
+ * of game logic to restart game.
+ * 
  * Images Used: 
  * white.png used from public domain, 
  * found at https://commons.wikimedia.org/wiki/File:Color-white.JPG
@@ -44,6 +47,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -71,6 +75,11 @@ public class BoardController extends javax.swing.JFrame {
      * A flag to indicate who's turn it is. (True if white)
      */
     boolean mbIsWhiteTurn;
+    
+    /**
+     * A flag to indicate if using an engine for one of the players.
+     */
+    boolean mbUseEngine;
     
     /**
      * The current move being played. This reference will be set to null
@@ -181,10 +190,6 @@ public class BoardController extends javax.swing.JFrame {
             }
         }
         
-        // Set variables that denote which square was previously selected
-        mcCurrentMove = null;
-        mbIsWhiteTurn = true;
-        
         //Set up the white piece icon
         ImageIcon lcIcon = new ImageIcon("src/checkersapp/images/white.jpg");
         Image pic = lcIcon.getImage();
@@ -197,22 +202,95 @@ public class BoardController extends javax.swing.JFrame {
         mcBlackIcon = new ImageIcon(pic2.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH));
         a3.setIcon(mcBlackIcon);
         
-        Player1Tag.setText("White's Turn");
-        Player2Tag.setText("");
-        
         // Create the Action Handlers for the squares
         createActionHandlers();
+        
+        // Reset the board for the new game.
+        resetBoard();
+    }
+    
+    /**
+     * This function resets the board state to begin a new game.
+     */
+    private void resetBoard()
+    {
+        // Initialize the board class to reset everything
+        mcBoard.initializeSquares();
+        
+        // Set variables that denote which square was previously selected
+        mcCurrentMove = null;
+        mbIsWhiteTurn = true;
+        mbUseEngine = false;
+        
+        // White always starts first
+        updateDisplayWhitesTurn();
         
         // Display the board
         updateDisplay();
     }
     
     /**
-     * This function updates the board and display
+     * This function displays a start menu and determines whether to play in 1
+     * or 2 player mode.
+     */
+    public void startMenu()
+    {
+        // Options for the user response
+        //String[] playerOptions = {"1 Player", "2 Player"};
+        String[] playerOptions = {"Not supported", "2 Player"};
+        
+        // Ask the user if they want to play single or multiplayer mode
+        int userResponse = JOptionPane.showOptionDialog(null, 
+                "Would you like to play 1 or 2 player mode?", "Start Menu", 
+                JOptionPane.YES_NO_OPTION, JOptionPane. QUESTION_MESSAGE, 
+                null, playerOptions, playerOptions[0]);
+        
+        // Parse the option the user selected
+        switch (userResponse) {
+            case JOptionPane.CLOSED_OPTION:
+                System.out.println("User closed the start menu. Exiting...");
+                System.exit(0);
+            case 0:
+                System.out.println("1 Player mode selected.");
+                break;
+            case 1:
+                System.out.println("2 Player mode selected.");
+                break;
+            default:
+                System.out.println("Unexpected option: " + userResponse);
+                System.exit(1);
+                break;
+        }
+        
+        mbUseEngine = (userResponse == 0);
+    }
+    
+    
+    public void promptNewGame()
+    {
+        // See if the user wants to play again
+        int userResponse = JOptionPane.showOptionDialog(null, 
+                "Would you like to play again?", "New Game?", 
+                JOptionPane.YES_NO_OPTION, JOptionPane. QUESTION_MESSAGE, 
+                null, null, null);
+        
+        if (userResponse == JOptionPane.YES_OPTION)
+        {
+            startMenu();
+            resetBoard();
+        }
+        else
+        {
+            System.exit(0);
+        }
+    }
+    
+    /**
+     * This function updates the board and display.
      */
     private void updateDisplay()
     {
-        /// Update the board
+        // Update the board
         for(int lnRow = 0; lnRow < Board.BOARD_WIDTH; lnRow++)
         {
             for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
@@ -315,7 +393,6 @@ public class BoardController extends javax.swing.JFrame {
         if(lbSuccess)
         {
             mbIsWhiteTurn = !mbIsWhiteTurn;
-            updateDisplay();
         }
         
         // Always null the current move because even if the move failed the
@@ -356,11 +433,98 @@ public class BoardController extends javax.swing.JFrame {
 
                             // Process, validate, and carry out the user's selection
                             processUserSelection(lnRowSel, lnColSel, lbIsRightClick);
+                            
+                            // At the end of the processing, update the display
+                            updateDisplay();
+                            
+                            checkIfGameOver();
                         }                    
                     }
                 );
             }
         }
+    }
+    
+    /**
+     * This function checks if the game is over. It will handle starting a new
+     * game if necessary. TODO: add in draw logic
+     */
+    private void checkIfGameOver()
+    {
+        // Check if a player won the game
+        CheckersColor leWinner = checkWinner();
+        
+        // If there is a winner. Declare the winner and ask the user if they 
+        // want to play again.
+        if (leWinner != null)
+        {
+            declareWinner(leWinner);
+            promptNewGame();
+        }
+    }
+    
+    /**
+     * This function will declare the winner of the game.
+     * 
+     * @param leWinner The color of the winner
+     */
+    private void declareWinner(CheckersColor leWinner)
+    {
+        JOptionPane.showOptionDialog(null, 
+                leWinner.getDisplayName() + " has won!", "Game Over", 
+                JOptionPane.DEFAULT_OPTION, JOptionPane.  INFORMATION_MESSAGE, 
+                null, null, null);
+    }
+    
+    /**
+     * This function checks if the game has a winner. It will return the color 
+     * of the winning player. (null if the game is not over)
+     * 
+     * @return the CheckersColor associated with the winner (null if not over)
+     */
+    private CheckersColor checkWinner()
+    {
+        // Return null if there is no winner yet
+        CheckersColor lnWinner = null;
+        
+        // If one color runs out of pieces then the other player wins
+        if(getNumPieces(CheckersColor.eeWHITE) == 0)
+        {
+            lnWinner = CheckersColor.eeBLACK;
+        }
+        else if(getNumPieces(CheckersColor.eeBLACK) == 0)
+        {
+            lnWinner = CheckersColor.eeWHITE;
+        }
+        
+        return lnWinner;
+    }
+    
+    /**
+     * This function returns the number of pieces for a given color on the board.
+     * 
+     * @param aePieceColor the color to check for
+     * @return the number of pieces of aePieceColor
+     */
+    private int getNumPieces(CheckersColor aePieceColor)
+    {
+        int lnNumPieces = 0;
+        // Iterate over all rows and check for pieces of the requested color
+        for(int lnRow = 0; lnRow < Board.BOARD_WIDTH; lnRow++)
+        {
+            for(int lnCol = 0; lnCol < Board.BOARD_WIDTH; lnCol++)
+            {
+                //Get the color of the piece at the square (null if none)
+                CheckersColor leLocalPieceColor = mcBoard.getLocalPieceColor(lnRow, lnCol);
+                
+                if(aePieceColor == leLocalPieceColor)
+                {
+                    lnNumPieces++;
+                }
+            }
+        }
+        
+        return lnNumPieces;
     }
     
     /**

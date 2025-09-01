@@ -8,6 +8,8 @@
  * Initial version          12/17/19
  * 
  * 12/16/20 Switch to checkers
+ * 
+ * 9/1/25 Added start menu
  */
 package checkersapp;
 
@@ -22,7 +24,9 @@ public class CheckersApp {
 
         // Start the application
         java.awt.EventQueue.invokeLater(() -> {
-            new BoardController(lcBoard).setVisible(true);
+            BoardController lcController = new BoardController(lcBoard);
+            lcController.setVisible(true);
+            lcController.startMenu(); // Safe place to interact with GUI
         });
     }
 }

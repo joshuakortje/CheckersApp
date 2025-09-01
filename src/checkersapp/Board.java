@@ -33,6 +33,8 @@ import java.util.ArrayList;
  * 
  * 10/22/21 Added code to "King" pieces and check if a king is on a square. Also
  * removed the logic for move validation and put it in the move class.
+ * 
+ * 9/1/25 Made initializeSquares public.
  */
 public class Board {
     
@@ -239,14 +241,7 @@ public class Board {
        if(lcSquare.hasPiece())
        {
            // Display W or B depending on the piece color
-           if(lcSquare.getPieceColor() == CheckersColor.eeWHITE)
-           {
-               leColor = CheckersColor.eeWHITE;
-           }
-           else
-           {
-               leColor = CheckersColor.eeBLACK;
-           }
+           leColor = lcSquare.getPieceColor();
        }
        return leColor;
    }
@@ -267,7 +262,7 @@ public class Board {
    /**
     * This function initializes the squares to the starting state of the game
     */
-   private void initializeSquares()
+   public void initializeSquares()
    {
        for(int lnRow = 0; lnRow < BOARD_WIDTH; lnRow++)
         {
